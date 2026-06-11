@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us | Cerevyn</title>
+
+    <!-- Tailwind CSS Engine -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Icon Packs -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css');
+
+        :root {
+            --primary-blue: #0024DE;
+            --primary-accent: #72CCFC;
+            --dark-bg: #050A30;
+            --darker-bg: #050A30;
+            --text-light: #E6E5FF;
+            --text-muted: #A3A3A3;
+            --surface: rgba(255, 255, 255, 0.06);
+            --surface-strong: rgba(255, 255, 255, 0.10);
+            --border-color: rgba(114, 204, 252, 0.18);
+            --page-bg: radial-gradient(circle at top, rgba(114, 204, 252, 0.12), rgba(5, 10, 48, 0.92) 40%), #050A30;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Geist', sans-serif;
+        }
+
+        body {
+            background: #050A30;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* ================= NAVBAR ================= */
+        nav {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 100;
+            width: 100%;
+            padding: 22px 40px;
+            background: transparent;
+            transition: padding 0.35s ease, background 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+        }
+
+        .nav-inner {
+            width: min(1240px, calc(100% - 120px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .nav-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-brand .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 1.05rem;
+            color: #72CCFC;
+        }
+
+        .brand-name {
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: #d0d8e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: white;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+            padding: 14px 0;
+        }
+
+        nav.scrolled .brand-name {
+            color: #0f172a;
+        }
+
+        nav.scrolled .nav-links a {
+            color: #0f172a;
+        }
+
+        nav.scrolled .nav-brand .logo {
+            background: rgba(15, 23, 42, 0.08);
+            color: #0f172a;
+        }
+
+        /* ================= HERO ================= */
+        .hero {
+            position: relative;
+            height: 78vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            background: url("assets/images/Hero_BG.png") center center/cover no-repeat;
+            padding-top: 80px;
+        }
+
+        .hero-overlay {
+            display: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 920px;
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            color: #ffffff;
+        }
+
+        .hero p {
+            max-width: 760px;
+            margin: auto;
+            font-size: 17px;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                height: 72vh;
+                padding: 120px 20px 80px;
+            }
+
+            .hero h1 {
+                font-size: 38px;
+                line-height: 1.1;
+                letter-spacing: -1px;
+            }
+
+            .hero p {
+                font-size: 15px;
+                line-height: 1.8;
+            }
+        }
+
+        /* ================= COMMON ================= */
+        section {
+            padding: 110px 0;
+            background: #050A30;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1240px;
+            margin: auto;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .section-desc {
+            color: #aeb7d0;
+            line-height: 1.9;
+            font-size: 16px;
+        }
+
+        /* ================= WHITE CARDS ================= */
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .white-card {
+            background: white;
+            border-radius: 12px;
+            padding: 28px 20px;
+            color: #0f172a;
+            transition: 0.35s ease;
+        }
+
+        .white-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 22px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            background: #eef4ff;
+            color: #0024DE;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 24px;
+        }
+
+        .white-card h4 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .white-card p {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.9;
+        }
+
+        /* ================= STRATEGIC GOALS ================= */
+        .goals-section {
+            padding: 140px 0;
+        }
+
+        .goals-section .section-title {
+            font-size: 52px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+            color: #ffffff;
+        }
+
+        .goals-section .section-desc {
+            max-width: 920px;
+            margin: 0 auto 90px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 2;
+            color: #aeb7d0;
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 34px;
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 50px;
+        }
+
+        .goals-grid::before {
+            content: '';
+            position: absolute;
+            top: 78px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(148, 163, 184, 0.28);
+            z-index: 0;
+        }
+
+        .goal-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .goal-circle {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            background: #0024DE;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 34px;
+            box-shadow: 0 0 30px rgba(0, 36, 222, 0.35), 0 0 60px rgba(0, 36, 222, 0.18);
+        }
+
+        .goal-box p {
+            font-size: 15px;
+            line-height: 1.9;
+            color: #c7d2fe;
+            margin: 0;
+            max-width: 190px;
+            text-align: center;
+        }
+
+        @media (max-width: 1200px) {
+            .goals-grid {
+                grid-template-columns: repeat(3, 1fr);
+                row-gap: 70px;
+            }
+
+            .goals-grid::before {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .goals-section {
+                padding: 100px 0;
+            }
+
+            .goals-section .section-title {
+                font-size: 38px;
+            }
+
+            .goals-section .section-desc {
+                font-size: 16px;
+                margin-bottom: 70px;
+            }
+
+            .goals-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .goal-circle {
+                width: 72px;
+                height: 72px;
+                font-size: 20px;
+            }
+
+            .goal-box p {
+                font-size: 14px;
+                max-width: 260px;
+            }
+        }
+
+        /* ================= TEAM ================= */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .team-box {
+            aspect-ratio: 1/1;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.35s ease;
+        }
+
+        .team-box:hover {
+            transform: translateY(-8px);
+            border: 2px solid #0024DE;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ================= UNIFIED HERO MATCHED MATCH CTA ================= */
+        .cta-section {
+            width: 100vw;
+            margin: 0;
+            padding: 100px 20px;
+            background: linear-gradient(90deg, #070F3A 0%, #0024DE 100%);
+            text-align: center;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+
+        .cta-section h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            color: white;
+            letter-spacing: -1px;
+        }
+
+        .cta-section p {
+            max-width: 750px;
+            margin: 0 auto 20px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .cta-btn {
+            padding: 14px 44px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cta-white {
+            background: linear-gradient(90deg, #0084ff, #0047ff);
+            color: white;
+        }
+
+        .cta-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 71, 255, 0.3);
+        }
+
+        .cta-outline {
+            background: white;
+            color: #1e293b;
+        }
+
+        .cta-outline:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        /* ================= SOLID BRAND MATRIX FOOTER ================= */
+        footer {
+            background-color: #050A30 !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            padding: 100px 0 40px 0;
+            color: white;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 50px;
+            width: 90%;
+            max-width: 1150px;
+            margin: 0 auto 80px;
+        }
+
+        .footer-logo-box {
+            width: 180px;
+            height: 50px;
+            background: white;
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+
+        .footer-description {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: #94a3b8;
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+
+        .social-links a:hover {
+            color: white;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 2.2;
+        }
+
+        .footer-col li {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .footer-col li:hover {
+            color: white;
+        }
+
+        .copyright-container {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1150px;
+            margin: auto;
+            font-size: 12px;
+            color: #64748b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .copyright-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ================= RESPONSIVE ADJUSTMENTS ================= */
+        @media(max-width: 1200px) {
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 768px) {
+            .hero h1 {
+                font-size: 30px;
+            }
+            .nav-inner {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .grid-4, .team-grid, .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-section h2 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="logo">C</span>
+                <span class="brand-name">Cerevyn</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./services.html">Services</a></li>
+                <li><a href="./products.html">Products</a></li>
+                <li><a href="./Tutorials.html">Tutorials</a></li>
+                <li><a href="./Blogs.html">Blogs</a></li>
+                <li><a href="./careers.html">Careers</a></li>
+                <li><a href="./about.html" class="active">About</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>About Cerevyn</h1>
+            <p>
+                A global AI company dedicated to transforming industries
+                through intelligent solutions and cutting-edge technology
+                that empowers businesses worldwide.
+            </p>
+        </div>
+    </section>
+
+    <!-- OUR MISSION -->
+    <section>
+        <div class="container grid md:grid-cols-2 gap-16 items-center">
+            <div>
+                <h2 class="section-title">Our Mission</h2>
+                <p class="section-desc mb-6">
+                    To harness the transformative power of artificial
+                    intelligence to enrich lives by revolutionizing
+                    healthcare, education, and business operations.
+                </p>
+                <p class="section-desc">
+                    We are committed to developing intelligent solutions
+                    that address real-world challenges, enhance human
+                    capabilities, and create meaningful impact across
+                    industries worldwide.
+                </p>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded-3xl h-[528px] flex items-center justify-center shadow-2xl hover:-translate-y-2 transition">
+                <i class="fas fa-microchip text-[90px] text-[#0024DE]"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- STRATEGIC GOALS -->
+    <section>
+        <div class="container">
+            <h2 class="section-title text-center">Strategic Goals</h2>
+            <p class="section-subtitle text-center text-gray-400 text-lg">
+                Our commitment to transforming the AI landscape
+            </p>
+
+            <div class="goals-grid mt-20">
+                <div class="goal-box">
+                    <div class="goal-circle">01</div>
+                    <p>Democratize AI technology across industries.</p>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-circle">02</div>
+                    <p>Bridge the gap between AI and practical applications.</p>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-circle">03</div>
+                    <p>Empower humans using responsible AI systems.</p>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-circle">04</div>
+                    <p>Establish India as a leader in ethical AI.</p>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-circle">05</div>
+                    <p>Create sustainable AI solutions for businesses.</p>
+                </div>
+                <div class="goal-box">
+                    <div class="goal-circle">06</div>
+                    <p>Enable global collaboration through AI platforms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUR VISION -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Our Vision</h2>
+            <p class="text-[22px] text-[#E2E8F0] mb-6 font-semibold leading-relaxed max-w-[700px]">
+                A future where artificial intelligence empowers everyone
+                to learn, heal, and innovate without boundaries.
+            </p>
+            <p class="section-desc max-w-2xl mb-16 leading-relaxed text-gray-400">
+                To harness the transformative power of artificial intelligence to enrich lives 
+                by revolutionizing healthcare, education, and business operations. 
+                We are committed to developing intelligent solutions that address real-world 
+                challenges, enhance human capabilities, and create meaningful impact across 
+                industries and communities worldwide.
+            </p>
+
+            <div class="grid-4">
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Vision_icon_1.png" alt="Accessibility" class="about-custom-icon">
+                    </div>
+                    <h4>Accessibility</h4>
+                    <p>Making AI technology accessible to individuals and organizations of all sizes.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Vision_icon_2.png" alt="Innovation" class="about-custom-icon">
+                    </div>
+                    <h4>Innovation</h4>
+                    <p>Continuously advancing the frontiers of AI research and application.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Vision_icon_3.png" alt="Responsibility" class="about-custom-icon">
+                    </div>
+                    <h4>Responsibility</h4>
+                    <p>Developing AI solutions that are ethical, transparent, and beneficial.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Vision_icon_4.png" alt="Collaboration" class="about-custom-icon">
+                    </div>
+                    <h4>Collaboration</h4>
+                    <p>Working with partners globally to maximize positive impact.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE PRINCIPLES -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">Our Core Principles</h2>
+            <p class="section-desc mb-16 max-w-3xl">
+                The fundamental beliefs that guide our approach
+                to AI development and shape every solution we create.
+            </p>
+
+            <div class="grid-4">
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Core_icon_1.png" alt="Human-Centered AI" class="about-custom-icon">
+                    </div>
+                    <h4>Human-<br>Centered AI</h4>
+                    <p>Every solution we create is designed to enhance human capabilities and improve quality of life.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Core_icon_2.png" alt="Inclusive Innovation" class="about-custom-icon">
+                    </div>
+                    <h4>Inclusive <br>Innovation</h4>
+                    <p>Making AI accessible and beneficial for everyone, regardless of background or location.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Core_icon_3.png" alt="Global Impact" class="about-custom-icon">
+                    </div>
+                    <h4>Global <br>Impact</h4>
+                    <p>Creating solutions that address worldwide challenges and drive positive change.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Core_icon_4.png" alt="Continuous Innovation" class="about-custom-icon">
+                    </div>
+                    <h4>Continuous <br>Innovation</h4>
+                    <p>Pushing the boundaries of what's possible with artificial intelligence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MEET OUR TEAM -->
+    <section>
+        <div class="container grid lg:grid-cols-4 gap-12">
+            <div>
+                <h2 class="section-title">Meet Our Team</h2>
+                <p class="section-desc">
+                    The leaders driving Cerevyn's mission to transform industries through Artificial Intelligence.
+                </p>
+            </div>
+            <div class="lg:col-span-3 team-grid">
+                <div class="team-box"></div>
+                <div class="team-box"></div>
+                <div class="team-box"></div>
+                <div class="team-box"></div>
+                <div class="team-box"></div>
+                <div class="team-box"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRINCIPLES THAT GUIDE US -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">The Principles That Guide Us</h2>
+            <p class="section-desc max-w-3xl mb-16">
+                The fundamental beliefs that guide our approach
+                to AI development and shape every solution we create.
+            </p>
+
+            <div class="grid-4">
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Guide_icon_1.png" alt="Precision" class="about-custom-icon">
+                    </div>
+                    <h4>Precision</h4>
+                    <p>Delivering accurate, reliable AI solutions that meet the highest standards of excellence.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Guide_icon_2.png" alt="Innovation" class="about-custom-icon">
+                    </div>
+                    <h4>Innovation</h4>
+                    <p>Pushing boundaries of what's possible with artificial intelligence and cutting-edge research.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Guide_icon_3.png" alt="Collaboration" class="about-custom-icon">
+                    </div>
+                    <h4>Collaboration</h4>
+                    <p>Working closely with clients to understand unique challenges and deliver tailored solutions.</p>
+                </div>
+                <div class="white-card">
+                    <div class="icon-box">
+                        <img src="assets/images/Guide_icon_4.png" alt="Global Impact" class="about-custom-icon">
+                    </div>
+                    <h4>Global Impact</h4>
+                    <p>Creating transformative solutions that improve lives and industries worldwide.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- === CTA SECTION === -->
+    <section class="cta-section">
+        <h2>Building Tomorrow’s Solutions Today</h2>
+        <p>
+            Every line of code we write, every model we train,
+            and every solution we deploy is guided by our commitment
+            to creating a better future through artificial intelligence.
+        </p>
+        <p style="font-weight:700; color:white;">
+            Join us in shaping a world where AI serves humanity’s greatest aspirations.
+        </p>
+        <div class="cta-buttons">
+            <a href="#" class="cta-btn cta-white">Join Our Mission</a>
+            <a href="#" class="cta-btn cta-outline">Explore Solutions</a>
+        </div>
+    </section>
+
+    <!-- === FOOTER SECTION === -->
+    <footer>
+        <div class="footer-grid">
+            <!-- Brand Column -->
+            <div>
+                <div class="footer-logo-box"></div>
+                <p class="footer-description">
+                    A global AI company transforming healthcare, education, and business operations with intelligent solutions designed for a smarter, more connected tomorrow.
+                </p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li>• Home</li>
+                    <li>• About Us</li>
+                    <li>• Services</li>
+                    <li>• Mission & Vision</li>
+                    <li>• Careers</li>
+                    <li>• Tutorials</li>
+                    <li>• Blog</li>
+                    <li>• Contact</li>
+                </ul>
+            </div>
+
+            <!-- Column 3 -->
+            <div class="footer-col">
+                <h4>Our Services</h4>
+                <ul>
+                    <li>• AI Healthcare Solutions</li>
+                    <li>• AI Education Platforms</li>
+                    <li>• AI Development Services</li>
+                    <li>• AI Automation Systems</li>
+                    <li>• Agentic AI Solutions</li>
+                    <li>• Entity Management Portal</li>
+                </ul>
+            </div>
+
+            <!-- Column 4 -->
+            <div>
+                <p style="font-size: 14px; color: #f8fafc; margin-bottom: 15px; font-weight: 500;">Subscribe to our newsletter for AI insights and updates.</p>
+                <input type="text" placeholder="Your email address" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: none; background: white; margin-bottom: 10px; font-size: 13px; color: black;">
+                <button style="width: 100%; background: #007bff; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-bottom: 30px;">Subscribe</button>
+                
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px;">Contact Us</h4>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 8px;"><strong>Email Us:</strong> info@cerevyn.com</p>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;"><strong>Call Us:</strong> +91 78935 25665</p>
+                <p style="font-size: 12px; color: #64748b; line-height: 1.5;">
+                    Our Headquarters:<br>
+                    T-Hub, Hyderabad Knowledge City, Serilingampally, Hyderabad, Telangana 500081, India
+                </p>
+            </div>
+        </div>
+
+        <!-- Subfoot Copyright Matrix -->
+        <div class="copyright-container">
+            <div>© 2026 Cerevyn Solutions Pvt Ltd. All rights reserved.</div>
+            <div class="copyright-links">
+                <span>Privacy Policy</span>
+                <span>Terms of Service</span>
+                <span>Cookie Policy</span>
+                <span>Sitemap</span>
+                <span style="color: white;">Made with passion in India</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NAVBAR SCROLL SCRIPT -->
+    <script>
+        const navbar = document.getElementById("navbar");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 40) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+        });
+    </script>
+</body>
+
+</html>

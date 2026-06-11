@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutorials & Learning Hub | Cerevyn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css');
+
+        :root {
+            --primary-blue: #0024DE;
+            --primary-accent: #72CCFC;
+            --dark-bg: #050A30;
+            --darker-bg: #050A30;
+            --text-light: #E6E5E5;
+            --text-muted: #A3A3A3;
+            --surface: rgba(255, 255, 255, 0.06);
+            --surface-strong: rgba(255, 255, 255, 0.10);
+            --border-color: rgba(114, 204, 252, 0.18);
+            --card-white: #ffffff;
+            --card-bg: #ffffff;
+            --page-bg: radial-gradient(circle at top, rgba(114, 204, 252, 0.12), rgba(5, 10, 48, 0.92) 40%), #050A30;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Geist', sans-serif; }
+        body { background: var(--page-bg); background-attachment: fixed; color: var(--text-light); overflow-x: hidden; }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 100;
+            width: 100%;
+            padding: 22px 40px;
+            background: transparent;
+            transition: padding 0.35s ease, background 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+        }
+        .nav-inner {
+            width: min(1240px, calc(100% - 120px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .nav-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .nav-brand .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 1.05rem;
+            color: #72CCFC;
+        }
+        .nav-brand .brand-name {
+            color: #ffffff;
+        }
+        nav.ready {
+            transform: translateY(0);
+        }
+        nav.scrolled {
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            padding: 12px 0;
+        }
+        nav.scrolled .nav-brand .brand-name,
+        nav.scrolled .nav-brand .logo {
+            color: #0F172A;
+            background: rgba(15, 23, 42, 0.08);
+        }
+        nav.scrolled .nav-links a {
+            color: #0F172A;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-links a {
+            color: #d0d8e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links a:hover {
+            color: white;
+        }
+        .nav-links a.active {
+            color: white;
+            font-weight: 700;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity 0.75s ease-out, transform 0.75s ease-out;
+            will-change: opacity, transform;
+        }
+        .animate-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hero.animate-on-scroll {
+            transform: none;
+            transition: opacity 0.85s ease-out;
+        }
+        .hero.animate-on-scroll.active {
+            opacity: 1;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(5,10,48,0.85) 0%, rgba(5,10,48,0.55) 100%), url("assets/images/Hero_BG.png") center/cover no-repeat;
+            background-blend-mode: overlay;
+            padding-top: 100px;
+            overflow: hidden;
+        }
+        .hero h1 { font-size: 46px; font-weight: 800; margin-bottom: 12px; }
+        .hero p { color: var(--text-gray); max-width: 750px; font-size: 15px; margin-bottom: 35px; }
+
+        /* --- SEARCH & FILTER DOCK --- */
+        .search-container { width: 100%; max-width: 1236px; position: relative; }
+        .search-container input {
+            width: 100%; background: #fff; border: none; border-radius: 50px;
+            height: 48px; padding: 0 25px 0 55px; font-size: 15px; color: #333;
+        }
+        .search-container i { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+
+        .filter-dock {
+            width: 100%;
+            max-width: 1236px;
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            background: rgba(255,255,255,0.035);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 10px 14px;
+            border-radius: 18px;
+            align-items: center;
+            justify-content: space-between;
+            overflow-x: auto;
+            flex-wrap: nowrap;
+        }
+
+        .filter-dock div {
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(255,255,255,0.65);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 42px;
+            padding: 0 18px;
+            border-radius: 12px;
+            white-space: nowrap;
+            transition: 0.3s ease;
+        }
+
+        .filter-dock div:hover {
+            background: rgba(255,255,255,0.05);
+            color: white;
+        }
+
+        .filter-dock div.active {
+            background: rgba(255,255,255,0.08);
+            color: white;
+        }
+
+        .tutorial-filters {
+            background: transparent;
+            padding: 20px 0 10px;
+        }
+        .tutorial-filters .container {
+            width: 95%;
+            max-width: 1236px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        /* --- TUTORIAL GRID --- */
+        .content-area {
+            width: 100%;
+            max-width: 1280px;
+            margin: 50px auto 70px;
+        }
+
+        .tutorial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 394px);
+            justify-content: center;
+            gap: 32px;
+        }
+
+        .card {
+            width: 394px;
+            height: 468px;
+            background: #ffffff;
+            border-radius: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: 0.35s ease;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .thumb {
+            width: 394px;
+            height: 201px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            border-radius: 0;
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.92;
+            transition: 0.4s ease;
+        }
+
+        .card:hover .thumb img {
+            transform: scale(1.05);
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 62px;
+            height: 62px;
+            background: rgba(255,255,255,0.16);
+            border: 2px solid rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+            z-index: 2;
+        }
+
+        .card-content {
+            width: 345px;
+            height: 228px;
+            margin: 0 auto;
+            padding-top: 18px;
+            padding-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: #111827;
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 0;
+        }
+
+        .stats {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        .fa-info-circle {
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .fa-info-circle:hover {
+            color: var(--primary-blue);
+        }
+
+        .card-content h3 {
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 10px;
+            color: #111827;
+            min-height: 56px;
+        }
+
+        .card-content p {
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: #6b7280;
+            margin-bottom: 16px;
+            min-height: 68px;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 14px;
+            border-radius: 0;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin-top: -4px;
+            transition: 0.3s ease;
+            border: none;
+        }
+
+        .btn-watch { 
+    background: #01005D; 
+    color: #fff;
+}
+        .btn-watch:hover { 
+    background: #000040; /* Slightly darker shade for hover effect */
+}
+
+        .btn-locked {
+            background: rgba(15,23,42,0.08);
+            color: rgba(15,23,42,0.45);
+            border: 1px solid rgba(15,23,42,0.08);
+            cursor: not-allowed;
+        }
+
+        /* ================= POPUP OVERLAY ================= */
+        .info-popup-overlay {
+            position: absolute;
+            bottom: 60px;
+            left: 24px;
+            right: 24px;
+            background: #F1F1F4;
+            border-radius: 0px;
+            padding: 24px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            color: #111827;
+            text-align: left;
+        }
+
+        .info-popup-overlay.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .info-popup-overlay::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #F1F1F4;
+        }
+
+        .info-popup-text {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.6;
+            color: #111827;
+            margin-bottom: 16px;
+        }
+
+        .info-popup-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .info-popup-pill {
+            background: #C4C3E9;
+            color: #050A30;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* === UNIFIED SERVICES-STYLE CTA SECTION === */
+        .cta-section {
+            width: 100vw;
+            margin: 0;
+            padding: 100px 20px;
+            background: linear-gradient(90deg, #070F3A 0%, #0024DE 100%);
+            text-align: center;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+
+        .cta-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 25px; color: white; }
+        .cta-section p { color: rgba(255,255,255,0.9); font-size: 16px; max-width: 750px; margin: 0 auto 45px; line-height: 1.8; }
+        .btn-group { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-top: 40px; }
+        
+        .btn { 
+            padding: 14px 99px; 
+            border: none; 
+            border-radius: 50px; 
+            font-size: 18px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s ease; 
+            text-decoration: none; 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-white { background: linear-gradient(90deg, #0084ff, #0047ff); color: white; }
+        .btn-white:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,71,255,0.3); }
+        .btn-outline { background: white; color: #1e293b; }
+        .btn-outline:hover { transform: translateY(-3px); background: rgba(255,255,255,0.92); }
+
+         /* === SOLID COLOR FOOTER (NO OVERLAYS / EXACT HEX COLOR) === */
+        footer {
+            background-color: #050A30 !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            padding: 100px 0 40px 0;
+            color: white;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            font-family: 'Geist', sans-serif;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 50px;
+            width: 90%;
+            max-width: 1150px;
+            margin: 0 auto 80px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1150px;
+            margin: auto;
+            font-size: 12px;
+            color: #64748b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        @media (max-width: 1200px) { #productGrid, .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 760px) { #productGrid, .footer-grid, .category-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="logo">C</span>
+                <span class="brand-name">Cerevyn</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./services.html">Services</a></li>
+                <li><a href="./products.html">Products</a></li>
+                <li><a href="./Tutorials.html" class="active">Tutorials</a></li>
+                <li><a href="./Blogs.html">Blogs</a></li>
+                <li><a href="./careers.html">Careers</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero animate-on-scroll">
+        <h1>AI Tutorials & Learning Hub</h1>
+        <p>Master artificial intelligence with our comprehensive tutorials, practical guides, and expert-led courses designed for all skill levels.</p>
+    </section>
+
+    <section class="tutorial-filters animate-on-scroll">
+        <div class="container">
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search tutorials...">
+            </div>
+
+            <div class="filter-dock">
+                <div class="active"><i class="fas fa-rocket"></i> All</div>
+                <div><i class="fas fa-heart"></i> Healthcare</div>
+                <div><i class="fas fa-graduation-cap"></i> Education</div>
+                <div><i class="fas fa-cog"></i> Automation</div>
+                <div><i class="fas fa-robot"></i> AI Agents</div>
+                <div><i class="fas fa-code"></i> Development</div>
+                <div><i class="fas fa-chart-line"></i> Business</div>
+                <div><i class="fas fa-globe"></i> General</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="content-area animate-on-scroll">
+        <div class="tutorial-grid" id="tutorialGridContainer">
+
+            <!-- CARD 1 -->
+            <div class="card">
+                <div class="thumb">
+                    <img src="assets/images/Tutorials_1.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">Healthcare</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>Getting Started with AI in Healthcare</h3>
+                    <p>Learn how to implement AI-powered diagnostics and patient monitoring systems.</p>
+                    <a href="#" class="btn-action btn-watch">Watch Now</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">Learn how to implement AI-powered diagnostics and patient monitoring systems in healthcare facilities.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">Diagnostics</span>
+                        <span class="info-popup-pill">Patient Care</span>
+                        <span class="info-popup-pill">Medical AI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2 -->
+            <div class="card">
+                <div class="thumb">
+                    <img src="assets/images/Tutorials_2.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">Education</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>Building Educational AI Platforms</h3>
+                    <p>Comprehensive guide to adaptive learning systems using AI and ML.</p>
+                    <a href="#" class="btn-action btn-locked">Coming Soon</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">A comprehensive guide to creating adaptive learning systems using artificial intelligence and machine learning.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">EdTech</span>
+                        <span class="info-popup-pill">Adaptive Learning</span>
+                        <span class="info-popup-pill">Personalization</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3 -->
+            <div class="card">
+                <div class="thumb">
+                    <img src="assets/images/Tutorials_3.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">Automation</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>AI Automation for Business Operations</h3>
+                    <p>Discover how to automate repetitive tasks and optimize workflows.</p>
+                    <a href="#" class="btn-action btn-watch">Watch Now</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">Discover how to automate repetitive tasks and optimize workflows with intelligent automation solutions.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">Workflow</span>
+                        <span class="info-popup-pill">Process Automation</span>
+                        <span class="info-popup-pill">Efficiency</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 4 -->
+            <div class="card">
+                <div class="thumb">
+                    <img src="assets/images/Tutorials_4.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">AI Agents</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>Developing Conversational AI Agents</h3>
+                    <p>Master the art of creating intelligent chatbots and voice assistants.</p>
+                    <a href="#" class="btn-action btn-watch">Watch Now</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">Master the art of creating intelligent chatbots and voice assistants that deliver exceptional user experiences.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">Chatbots</span>
+                        <span class="info-popup-pill">NLP</span>
+                        <span class="info-popup-pill">Conversational AI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 5 -->
+            <div class="card">
+                <div class="thumb">
+                    <img src="assets/images/Tutorials_5.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">Development</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>Machine Learning Best Practices</h3>
+                    <p>Essential strategies for implementing robust ML models in production.</p>
+                    <a href="#" class="btn-action btn-locked">Coming Soon</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">Essential techniques and strategies for implementing robust machine learning models in production environments.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">MLOps</span>
+                        <span class="info-popup-pill">Model Deployment</span>
+                        <span class="info-popup-pill">Best Practices</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 6 -->
+            <div class="card">
+                <div class="thumb">
+                   <img src="assets/images/Tutorials_6.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">General</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>AI Ethics and Responsible Dev</h3>
+                    <p>Understanding ethical considerations for responsible AI solutions.</p>
+                    <a href="#" class="btn-action btn-watch">Watch Now</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">Understanding ethical considerations and best practices for developing responsible AI solutions.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">Ethics</span>
+                        <span class="info-popup-pill">Responsible AI</span>
+                        <span class="info-popup-pill">Governance</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 7 -->
+            <div class="card">
+                <div class="thumb">
+                    <img src="assets/images/Tutorials_7.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">Automation</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>Computer Vision Fundamentals</h3>
+                    <p>Master image recognition and object detection with practical examples.</p>
+                    <a href="#" class="btn-action btn-watch">Watch Now</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">Master image recognition, object detection, and computer vision techniques with practical examples.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">Computer Vision</span>
+                        <span class="info-popup-pill">Image Processing</span>
+                        <span class="info-popup-pill">CV</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 8 -->
+            <div class="card">
+                <div class="thumb">
+                    <img src="assets/images/Tutorials_8.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">Development</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>Natural Language Processing Basics</h3>
+                    <p>Fundamentals of NLP including text classification and sentiment analysis.</p>
+                    <a href="#" class="btn-action btn-locked">Coming Soon</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">Learn the fundamentals of NLP including text classification, sentiment analysis, and language models.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">Text Analysis</span>
+                        <span class="info-popup-pill">Language Models</span>
+                        <span class="info-popup-pill">NLP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 9 -->
+            <div class="card">
+                <div class="thumb">
+                    <img src="assets/images/Tutorials_9.png">
+                    <div class="play-btn"><i class="fas fa-play"></i></div>
+                </div>
+                <div class="card-content">
+                    <div class="meta-row">
+                        <span class="tag">Business</span>
+                        <div class="stats">
+                            <span><i class="far fa-clock"></i> 45min</span>
+                            <span><i class="far fa-chart-bar"></i> Beginner</span>
+                            <i class="fas fa-info-circle info-trigger"></i>
+                        </div>
+                    </div>
+                    <h3>AI in Finance: Predictive Analytics</h3>
+                    <p>Explore AI applications in finance for risk and market predictions.</p>
+                    <a href="#" class="btn-action btn-watch">Watch Now</a>
+                </div>
+                <div class="info-popup-overlay">
+                    <div class="info-popup-text">Explore AI applications in finance including risk assessment, fraud detection, and market predictions.</div>
+                    <div class="info-popup-tags">
+                        <span class="info-popup-pill">Finance</span>
+                        <span class="info-popup-pill">Predictive Analytics</span>
+                        <span class="info-popup-pill">Risk</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- === CTA SECTION WITH FIGMA CONTENT & SERVICES DESIGN === -->
+    <section class="cta-section">
+        <h2>Ready to Master AI?</h2>
+        <p>
+            Join thousands of developers, engineers, and AI enthusiasts who are transforming 
+            their careers with our comprehensive AI tutorials and hands-on learning experiences.
+        </p>
+        <div class="btn-group">
+            <a href="#" class="btn btn-white"><i class="fas fa-book-open"></i> Get Learning Path</a>
+            <a href="#" class="btn btn-outline"><i class="fas fa-download"></i> Download Syllabus</a>
+        </div>
+    </section>
+
+    <!-- === FIGMA-MATCHED FOOTER FROM SERVICES PAGE === -->
+    <footer>
+        <div class="footer-grid">
+            <!-- Branding & Social -->
+            <div>
+                <div style="background: #e2e8f0; width: 180px; height: 50px; margin-bottom: 25px; border-radius: 4px;"></div>
+                <p style="font-size: 14px; color: #94a3b8; line-height: 1.7; margin-bottom: 25px;">
+                    A global AI company transforming healthcare, education, and business operations with intelligent solutions designed for a smarter, more connected tomorrow.
+                </p>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <i class="fab fa-facebook" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-twitter" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-linkedin" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-instagram" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-youtube" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 25px;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0; color: #94a3b8; font-size: 14px; line-height: 2.2;">
+                    <li>• Home</li>
+                    <li>• About Us</li>
+                    <li>• Services</li>
+                    <li>• Mission & Vision</li>
+                    <li>• Careers</li>
+                    <li>• Tutorials</li>
+                    <li>• Blog</li>
+                    <li>• Contact</li>
+                </ul>
+            </div>
+
+            <!-- Our Services -->
+            <div>
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 25px;">Our Services</h4>
+                <ul style="list-style: none; padding: 0; color: #94a3b8; font-size: 14px; line-height: 2.2;">
+                    <li>• AI Healthcare Solutions</li>
+                    <li>• AI Education Platforms</li>
+                    <li>• AI Development Services</li>
+                    <li>• AI Automation Systems</li>
+                    <li>• Agentic AI Solutions</li>
+                    <li>• Entity Management Portal</li>
+                </ul>
+            </div>
+
+            <!-- Newsletter & Contact -->
+            <div>
+                <p style="font-size: 14px; color: #f8fafc; margin-bottom: 15px; font-weight: 500;">Subscribe to our newsletter for AI insights and updates.</p>
+                <input type="text" placeholder="Your email address" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: none; background: white; margin-bottom: 10px; font-size: 13px;">
+                <button style="width: 100%; background: #007bff; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-bottom: 30px;">Subscribe</button>
+                
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px;">Contact Us</h4>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 8px;"><strong>Email Us:</strong> info@cerevyn.com</p>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;"><strong>Call Us:</strong> +91 78935 25665</p>
+                <p style="font-size: 12px; color: #64748b; line-height: 1.5;">
+                    Our Headquarters:<br>
+                    T-Hub, Hyderabad Knowledge City, Serilingampally, Hyderabad, Telangana 500081, India
+                </p>
+            </div>
+        </div>
+
+        <!-- Bottom Copyright Bar -->
+        <div class="footer-bottom">
+            <div>© 2026 Cerevyn Solutions Pvt Ltd. All rights reserved.</div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <span>Privacy Policy</span>
+                <span>Terms of Service</span>
+                <span>Cookie Policy</span>
+                <span>Sitemap</span>
+                <span style="color: white;">Made with passion in India</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        
+        function filterData(category, element) {
+            document.querySelectorAll('.filter-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+
+            const cards = document.querySelectorAll('.s-item');
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.classList.add('show');
+                } else {
+                    card.classList.remove('show');
+                }
+            });
+        }
+
+        const navbar = document.querySelector("nav");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 40) {
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+        });
+
+        function attachInfoTriggers() {
+            const infoTriggers = document.querySelectorAll('.info-trigger');
+            infoTriggers.forEach(trigger => {
+                if (trigger._infoClickHandler) {
+                    trigger.removeEventListener('click', trigger._infoClickHandler);
+                }
+                const handler = function(event) {
+                    event.stopPropagation();
+                    const currentCard = this.closest('.card');
+                    const currentPopup = currentCard.querySelector('.info-popup-overlay');
+
+                    document.querySelectorAll('.info-popup-overlay').forEach(popup => {
+                        if (popup !== currentPopup) {
+                            popup.classList.remove('active');
+                        }
+                    });
+
+                    currentPopup.classList.toggle('active');
+                };
+                trigger._infoClickHandler = handler;
+                trigger.addEventListener('click', handler);
+            });
+        }
+
+        async function fetchAndRenderTutorials() {
+            const container = document.getElementById('tutorialGridContainer');
+            if (!container) return;
+
+            try {
+                const supabaseUrl = 'https://cpvhzdxxpgftjkjqadec.supabase.co';
+                const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdmh6ZHh4cGdmdGpranFhZGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDY4NjEsImV4cCI6MjA5NTg4Mjg2MX0._nBO3Dlv09pHh8LjcLfMH7sovDvQJDz9qKAN_rlrP4I';
+                const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+                const { data, error } = await _supabase
+                    .from('tutorials')
+                    .select('*')
+                    .order('id', { ascending: false });
+
+                if (error) {
+                    console.error('Supabase tutorials fetch error:', error);
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    return;
+                }
+
+                const tutorialHtml = data.map(item => {
+                    const tag = item.category || item.tag || 'General';
+                    const duration = item.duration || item.time || '45min';
+                    const level = item.level || item.difficulty || 'Beginner';
+                    const title = item.title || 'Untitled Tutorial';
+                    const description = item.description || item.summary || 'No description available.';
+                    const status = item.status || 'Watch Now';
+                    const actionClass = status.toLowerCase().includes('coming') ? 'btn-locked' : 'btn-watch';
+                    const infoTags = Array.isArray(item.tags) ? item.tags : (item.tags ? item.tags.split(',').map(tag => tag.trim()) : []);
+
+                    // Extract YouTube video ID from URL
+                    let videoId = '';
+                    const videoUrl = item.video_url || item.video || item.url || '';
+                    if (videoUrl) {
+                        const match = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                        videoId = match ? match[1] : '';
+                    }
+
+                    return `
+                        <div class="card">
+                            <div class="thumb">
+                                ${videoId ? `<iframe width="394" height="201" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` : `<img src="assets/images/Tutorials_1.png"><div class="play-btn"><i class="fas fa-play"></i></div>`}
+                            </div>
+                            <div class="card-content">
+                                <div class="meta-row">
+                                    <span class="tag">${tag}</span>
+                                    <div class="stats">
+                                        <span><i class="far fa-clock"></i> ${duration}</span>
+                                        <span><i class="far fa-chart-bar"></i> ${level}</span>
+                                        <i class="fas fa-info-circle info-trigger"></i>
+                                    </div>
+                                </div>
+                                <h3>${title}</h3>
+                                <p>${description}</p>
+                                <a href="${videoUrl || '#'}" class="btn-action ${actionClass}">${status}</a>
+                            </div>
+                            <div class="info-popup-overlay">
+                                <div class="info-popup-text">${description}</div>
+                                <div class="info-popup-tags">
+                                    ${infoTags.length > 0 ? infoTags.map(tag => `<span class="info-popup-pill">${tag}</span>`).join('') : `<span class="info-popup-pill">AI</span>`}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                container.insertAdjacentHTML('beforeend', tutorialHtml);
+                attachInfoTriggers();
+            } catch (fetchError) {
+                console.error('Failed to load Supabase tutorial cards:', fetchError);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            attachInfoTriggers();
+            fetchAndRenderTutorials();
+        });
+    </script>
+</body>
+</html>

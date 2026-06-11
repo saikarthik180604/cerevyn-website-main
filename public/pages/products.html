@@ -1,0 +1,826 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | Cerevyn AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css');
+
+        :root {
+            --primary-blue: #0024DE;
+            --primary-accent: #72CCFC;
+            --dark-bg: #050A30;
+            --darker-bg: #050A30;
+            --text-light: #E6E5FF;
+            --text-muted: #A3A3A3;
+            --surface: rgba(255, 255, 255, 0.06);
+            --surface-strong: rgba(255, 255, 255, 0.10);
+            --border-color: rgba(114, 204, 252, 0.18);
+            --page-bg: radial-gradient(circle at top, rgba(114, 204, 252, 0.12), rgba(5, 10, 48, 0.92) 40%), #050A30;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Geist', sans-serif;
+            background: var(--page-bg);
+            background-attachment: fixed;
+            color: var(--text-light);
+            line-height: 1.6;
+            padding-top: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 100;
+            width: 100%;
+            padding: 22px 40px;
+            background: transparent;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: padding 0.35s ease, background 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease, opacity 0.35s ease;
+        }
+        .nav-inner {
+            width: min(1240px, calc(100% - 120px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+        .nav-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .nav-brand .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 1.05rem;
+            color: #72CCFC;
+        }
+        .nav-brand .brand-name {
+            color: #ffffff;
+        }
+        nav.ready {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        nav.scrolled {
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            padding: 12px 0;
+        }
+        nav.scrolled .nav-brand .brand-name,
+        nav.scrolled .nav-brand .logo {
+            color: #0F172A;
+            background: rgba(15, 23, 42, 0.08);
+        }
+        nav.scrolled .nav-links a {
+            color: #0F172A;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-links a {
+            color: #d0d8e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .nav-links a:hover {
+            color: white;
+        }
+        .nav-links a.active {
+            color: white;
+            font-weight: 700;
+        }
+
+        /* === UNIFIED HERO SECTION === */
+        .hero {
+            padding: 140px 0 90px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url("assets/images/Hero_BG.png") center top/cover no-repeat;
+            color: #ffffff;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 0;
+        }
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 1150px;
+            margin: auto;
+        }
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+            color: #ffffff;
+        }
+        .hero p {
+            color: rgba(255,255,255,0.88);
+            max-width: 720px;
+            margin: 0 auto;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        /* === UNIFIED FILTERS SECTION === */
+        .filters-section {
+            padding: 60px 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            position: relative;
+            height: 180px;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.4s ease;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            transition: 0.4s ease;
+        }
+
+        .category-card span {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .category-card:hover img,
+        .category-card.active img {
+            opacity: 0.8;
+            transform: scale(1.1);
+        }
+
+        .category-card.active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .search-bar { 
+            width: 100%;
+            padding: 15px 25px; 
+            border-radius: 50px; 
+            border: 1px solid #334155; 
+            background: #0f172a; 
+            color: white; 
+            margin-bottom: 60px; 
+            font-size: 14px;
+        }
+        
+        /* --- MAIN GRID SECTION --- */
+        .main-grid-section { 
+            padding: 0 0 100px 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        #productGrid { 
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 28px; 
+            text-align: left;
+        }
+
+        #productGrid .product-item { 
+            background: #ffffff;
+            border-radius: 0px 40px 0px 40px; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            color: #0f172a; 
+            min-height: 580px; 
+            border: none;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2); 
+        }
+        
+        #productGrid .product-item:hover { 
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        #productGrid .product-item img { 
+            width: 100%;
+            height: 230px; 
+            object-fit: cover; 
+            display: block; 
+            border-radius: 0px 40px 0px 0px;
+            transition: transform 0.6s ease;
+        }
+
+        #productGrid .product-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .product-info { 
+            padding: 32px 28px 0px 28px;
+            display: flex; 
+            flex-direction: column; 
+            flex: 1; 
+            align-items: flex-start; 
+            text-align: left; 
+            width: 100%;
+            background: #ffffff;
+        }
+        
+        .product-info h3 { 
+            font-size: 24px;
+            color: #050A30; 
+            margin: 0 0 12px 0; 
+            font-weight: 800; 
+            line-height: 1.25;
+        }
+        .product-info p { 
+            font-size: 14px; 
+            color: #475569; 
+            line-height: 1.6; 
+            margin-bottom: 24px;
+        }
+        
+        .tag-group { 
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 8px; 
+            margin-bottom: 32px; 
+        }
+        .tag { 
+            background: #F0F3FF; 
+            color: #0024DE;
+            font-size: 12px; 
+            font-weight: 600; 
+            padding: 6px 14px; 
+            border-radius: 6px; 
+            border: none;
+        }
+        
+        .explore-link { 
+            background: #F4F6FF; 
+            width: 100%;
+            padding: 20px 28px;
+            margin-top: auto; 
+            display: flex; 
+            justify-content: space-between;
+            align-items: center; 
+            text-decoration: none; 
+            border-radius: 0px 0px 0px 40px;
+            transition: background 0.3s ease;
+        }
+        .explore-link span {
+            color: #050A30;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .explore-link i {
+            color: #0024DE;
+            font-size: 14px;
+            transition: transform 0.3s ease;
+        }
+        #productGrid .product-item:hover .explore-link {
+            background: #E6EAFF;
+        }
+        #productGrid .product-item:hover .explore-link i { 
+            transform: translateX(5px);
+        }
+
+        /* === UNIFIED CTA SECTION === */
+        .cta-section {
+            width: 100vw;
+            margin: 0;
+            padding: 100px 20px;
+            background: linear-gradient(90deg, #070F3A 0%, #0024DE 100%);
+            text-align: center;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+
+        .cta-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 25px; color: white; }
+        .cta-section p { color: rgba(255,255,255,0.9); font-size: 16px; max-width: 750px; margin: 0 auto 45px; line-height: 1.8; }
+        .btn-group { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; margin-top: 40px; }
+        
+        .btn { 
+            padding: 14px 44px;
+            border: none; 
+            border-radius: 50px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s ease; 
+            text-decoration: none; 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-white { background: linear-gradient(90deg, #0084ff, #0047ff); color: white; }
+        .btn-white:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,71,255,0.3); }
+        .btn-outline { background: white; color: #1e293b; }
+        .btn-outline:hover { transform: translateY(-3px); background: rgba(255,255,255,0.92); }
+
+        /* === SOLID COLOR FOOTER === */
+        footer {
+            background-color: #050A30 !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            padding: 100px 0 40px 0;
+            color: white;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 50px;
+            width: 90%;
+            max-width: 1150px;
+            margin: 0 auto 80px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1150px;
+            margin: auto;
+            font-size: 12px;
+            color: #64748b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        @media (max-width: 1200px) { #productGrid, .footer-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 760px) { #productGrid, .footer-grid, .category-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="logo">C</span>
+                <span class="brand-name">Cerevyn</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./services.html">Services</a></li>
+                <li><a href="./products.html" class="active">Products</a></li>
+                <li><a href="./Tutorials.html">Tutorials</a></li>
+                <li><a href="./Blogs.html">Blogs</a></li>
+                <li><a href="./careers.html">Careers</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-inner">
+            <h1>AI Product Suite</h1>
+            <p>Transform your organization with our cutting-edge AI products designed for enterprise scalability, security, and performance across industries.</p>
+        </div>
+    </section>
+
+    <section class="filters-section container">
+        <div class="category-grid">
+            <div class="category-card active">
+                <img src="assets/images/All_services.jpeg" alt="">
+                <span>All Services</span>
+            </div>
+            <div class="category-card">
+                <img src="assets/images/Ai_Tech.jpeg" alt="">
+                <span>AI & Technology</span>
+            </div>
+            <div class="category-card">
+                <img src="assets/images/System_Web.jpeg" alt="">
+                <span>Systems & Web</span>
+            </div>
+            <div class="category-card">
+                <img src="assets/images/Creative_media.jpeg" alt="">
+                <span>Creative & Media</span>
+            </div>
+        </div>
+        <input type="text" class="search-bar" placeholder="Search for a product...">
+    </section>
+
+    <section class="main-grid-section container">
+        <div id="productGrid">
+         
+            <div class="product-item" data-category="ai-technology">
+                <img src="assets/images/Product_1.png" alt="Product 1">
+                <div class="product-info">
+                    <h3>Cerevakyanet (Text-to-Text)</h3>
+                    <p>Advanced AI text generation and transformation platform for content creation and summarization.</p>
+                    <div class="tag-group">
+                        <span class="tag">Advanced NLP</span>
+                        <span class="tag">Content Generation</span>
+                        <span class="tag">Text Summarization</span>
+                        <span class="tag">Multi-language Support</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="creative-media">
+                <img src="assets/images/Product_2.png" alt="Product 2">
+                <div class="product-info">
+                    <h3>Caption Craft AI (Subtitle)</h3>
+                    <p>Intelligent subtitle and caption generation platform with automatic synchronization.</p>
+                    <div class="tag-group">
+                        <span class="tag">Auto-sync</span>
+                        <span class="tag">Multi-language</span>
+                        <span class="tag">Real-time Processing</span>
+                        <span class="tag">Custom Styling</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="ai-technology">
+                <img src="assets/images/Product_3.png" alt="Product 3">
+                <div class="product-info">
+                    <h3>Cerevak (Voice AI)</h3>
+                    <p>State-of-the-art voice AI platform for speech synthesis, voice cloning, and natural voice interactions.</p>
+                    <div class="tag-group">
+                        <span class="tag">Voice Cloning</span>
+                        <span class="tag">Speech Synthesis</span>
+                        <span class="tag">Real-time Processing</span>
+                        <span class="tag">Multi-languages</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="ai-technology">
+                <img src="assets/images/Product_4.png" alt="Product 4">
+                <div class="product-info">
+                    <h3>AI-Powered ADHD Early Identification</h3>
+                    <p>Revolutionary pediatric innovation detecting early ADHD signs from 9 months using computer vision and behavioral AI analysis.</p>
+                    <div class="tag-group">
+                        <span class="tag">Early Detection</span>
+                        <span class="tag">Clinical Integration</span>
+                        <span class="tag">Behavioral Pattern Analysis</span>
+                        <span class="tag">Real-time Monitoring</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="creative-media">
+                <img src="assets/images/Product_5.png" alt="Product 5">
+                <div class="product-info">
+                    <h3>Cultural Learning AI Toy</h3>
+                    <p>Interactive AI-powered educational toy with voice cloning, 3D visualization, and multi-language storytelling.</p>
+                    <div class="tag-group">
+                        <span class="tag">Voice Cloning</span>
+                        <span class="tag">3D Visualization</span>
+                        <span class="tag">Multi-language Support</span>
+                        <span class="tag">Interactive Storytelling</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="ai-technology">
+                <img src="assets/images/Product_6.png" alt="Product 6">
+                <div class="product-info">
+                    <h3>Healthcare AI Diagnostics</h3>
+                    <p>Advanced AI systems for early disease detection, patient monitoring, and personalized treatment recommendations.</p>
+                    <div class="tag-group">
+                        <span class="tag">Medical Imaging</span>
+                        <span class="tag">Predictive Analytics</span>
+                        <span class="tag">Clinical Decision</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="ai-technology">
+                <img src="assets/images/Product_7.png" alt="Product 7">
+                <div class="product-info">
+                    <h3>Conversational AI Agents</h3>
+                    <p>Intelligent virtual assistants and chatbots for enhanced customer engagement and 24/7 support automation.</p>
+                    <div class="tag-group">
+                        <span class="tag">24/7 Support</span>
+                        <span class="tag">Multi-language NLP</span>
+                        <span class="tag">Personalized Responses</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="systems-web">
+                <img src="assets/images/Product_8.png" alt="Product 8">
+                <div class="product-info">
+                    <h3>Enterprise Business Systems</h3>
+                    <p>Comprehensive digital platforms for business entity management across global jurisdictions.</p>
+                    <div class="tag-group">
+                        <span class="tag">Global Compliance</span>
+                        <span class="tag">Lifecycle Management</span>
+                        <span class="tag">Real-time Analytics</span>
+                        <span class="tag">API Integration</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="ai-technology">
+                <img src="assets/images/Product_9.png" alt="Product 9">
+                <div class="product-info">
+                    <h3>Intelligent Learning Systems</h3>
+                    <p>Adaptive educational platforms with AI-driven personalization and interactive learning experiences.</p>
+                    <div class="tag-group">
+                        <span class="tag">Adaptive Learning</span>
+                        <span class="tag">Progress Analytics</span>
+                        <span class="tag">Interactive Content</span>
+                        <span class="tag">Gamified Modules</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="product-item" data-category="ai-technology">
+                <img src="assets/images/Product_10.png" alt="Product 10">
+                <div class="product-info">
+                    <h3>Aerial Drones & Surveillance</h3>
+                    <p>AI-powered drone solutions for aerial photography, videography, and intelligent surveillance with real-time analytics.</p>
+                    <div class="tag-group">
+                        <span class="tag">Aerial Cinematography</span>
+                        <span class="tag">Real-time Analytics</span>
+                        <span class="tag">Autonomous Navigation</span>
+                        <span class="tag">Security Monitoring</span>
+                    </div>
+                </div>
+                <a href="#" class="explore-link">
+                    <span>Explore Product</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Transform Your Business?</h2>
+        <p>Partner with Cerevyn to leverage cutting-edge AI solutions including drones, surveying, and automation that drive innovation and create competitive advantages in your industry.</p>
+        <div class="btn-group">
+            <a href="#" class="btn btn-white">Start Your AI Journey</a>
+            <a href="#" class="btn btn-outline">Learn About Us</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div style="background: #e2e8f0; width: 180px; height: 50px; margin-bottom: 25px; border-radius: 4px;"></div>
+                <p style="font-size: 14px; color: #94a3b8; line-height: 1.7; margin-bottom: 25px;">
+                    A global AI company transforming healthcare, education, and business operations with intelligent solutions designed for a smarter, more connected tomorrow.
+                </p>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <i class="fab fa-facebook" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-twitter" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-linkedin" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-instagram" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-youtube" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 25px;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0; color: #94a3b8; font-size: 14px; line-height: 2.2;">
+                    <li>• Home</li>
+                    <li>• About Us</li>
+                    <li>• Services</li>
+                    <li>• Mission & Vision</li>
+                    <li>• Careers</li>
+                    <li>• Tutorials</li>
+                    <li>• Blog</li>
+                    <li>• Contact</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 25px;">Our Services</h4>
+                <ul style="list-style: none; padding: 0; color: #94a3b8; font-size: 14px; line-height: 2.2;">
+                    <li>• AI Healthcare Solutions</li>
+                    <li>• AI Education Platforms</li>
+                    <li>• AI Development Services</li>
+                    <li>• AI Automation Systems</li>
+                    <li>• Agentic AI Solutions</li>
+                    <li>• Entity Management Portal</li>
+                </ul>
+            </div>
+
+            <div>
+                <p style="font-size: 14px; color: #f8fafc; margin-bottom: 15px; font-weight: 500;">Subscribe to our newsletter for AI insights and updates.</p>
+                <input type="text" placeholder="Your email address" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: none; background: white; margin-bottom: 10px; font-size: 13px;">
+                <button style="width: 100%; background: #007bff; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-bottom: 30px;">Subscribe</button>
+                
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px;">Contact Us</h4>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 8px;"><strong>Email Us:</strong> info@cerevyn.com</p>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;"><strong>Call Us:</strong> +91 78935 25665</p>
+                <p style="font-size: 12px; color: #64748b; line-height: 1.5;">
+                    Our Headquarters:<br>
+                    T-Hub, Hyderabad Knowledge City, Serilingampally, Hyderabad, Telangana 500081, India
+                </p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2026 Cerevyn Solutions Pvt Ltd. All rights reserved.</div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <span>Privacy Policy</span>
+                <span>Terms of Service</span>
+                <span>Cookie Policy</span>
+                <span>Sitemap</span>
+                <span style="color: white;">Made with passion in India</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryCards = document.querySelectorAll('.category-card');
+            const searchInput = document.querySelector('.search-bar');
+            
+            categoryCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const categoryText = this.querySelector('span').textContent.toLowerCase();
+                    const products = document.querySelectorAll('.product-item');
+                    
+                    categoryCards.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    let filterCategory = '';
+                    if (categoryText === 'all services') {
+                        filterCategory = 'all';
+                    } else if (categoryText === 'ai & technology') {
+                        filterCategory = 'ai-technology';
+                    } else if (categoryText === 'systems & web') {
+                        filterCategory = 'systems-web';
+                    } else if (categoryText === 'creative & media') {
+                        filterCategory = 'creative-media';
+                    }
+                    
+                    products.forEach(product => {
+                        const productCategory = product.getAttribute('data-category');
+                        if (filterCategory === 'all' || productCategory === filterCategory) {
+                            product.style.display = 'flex';
+                        } else {
+                            product.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const products = document.querySelectorAll('.product-item');
+                    
+                    products.forEach(product => {
+                        const title = product.querySelector('h3').textContent.toLowerCase();
+                        const description = product.querySelector('p').textContent.toLowerCase();
+                        const tags = Array.from(product.querySelectorAll('.tag')).map(tag => tag.textContent.toLowerCase());
+                        
+                        const matchesSearch = title.includes(searchTerm) || 
+                                              description.includes(searchTerm) || 
+                                              tags.some(tag => tag.includes(searchTerm));
+                        
+                        if (matchesSearch) {
+                            product.style.display = 'flex';
+                        } else {
+                            product.style.display = 'none';
+                        }
+                    });
+                });
+            }
+
+            const nav = document.querySelector('nav');
+            function updateNav() {
+                if (window.scrollY > 20) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            }
+
+            window.addEventListener('scroll', updateNav);
+            updateNav();
+            setTimeout(() => nav.classList.add('ready'), 50);
+        });
+    </script>
+</body>
+</html>

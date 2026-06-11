@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Insights & Blog | Cerevyn</title>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        @import url('https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.css');
+
+        :root{
+            --primary-blue:#0024DE;
+            --primary-accent:#72CCFC;
+            --dark-bg:#050A30;
+            --text-light:#E6E5FF;
+            --page-bg: radial-gradient(circle at top,
+            rgba(114,204,252,0.12),
+            rgba(5,10,48,0.92) 40%),
+            #050A30;
+            /* Figma specific interactive elements color */
+            --figma-blue: #01005D;
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Geist',sans-serif;
+        }
+
+        body{
+            background:var(--page-bg);
+            background-attachment:fixed;
+            color:white;
+            overflow-x:hidden;
+        }
+
+        .container{
+            width:95%;
+            max-width:1236px;
+            margin:auto;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        nav{
+            position:fixed;
+            inset:0 0 auto 0;
+            z-index:1000;
+            width:100%;
+            padding:22px 40px;
+            background:transparent;
+            transition:
+            padding 0.35s ease,
+            background 0.35s ease,
+            box-shadow 0.35s ease,
+            transform 0.35s ease;
+        }
+
+        .nav-inner{
+            width:min(1240px,calc(100% - 120px));
+            margin:0 auto;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:24px;
+        }
+
+        .nav-brand{
+            display:inline-flex;
+            align-items:center;
+            gap:12px;
+            color:#ffffff;
+            text-decoration:none;
+            font-weight:800;
+            font-size:1rem;
+            letter-spacing:-0.02em;
+        }
+
+        .nav-brand .logo{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            width:42px;
+            height:42px;
+            border-radius:14px;
+            background:rgba(255,255,255,0.12);
+            font-size:1.05rem;
+            color:#72CCFC;
+            transition:0.3s ease;
+        }
+
+        .nav-brand .brand-name{
+            color:#ffffff;
+            transition:0.3s ease;
+        }
+
+        nav.scrolled{
+            box-shadow:0 18px 48px rgba(0,0,0,0.18);
+            background:rgba(255,255,255,0.92);
+            backdrop-filter:blur(16px);
+            padding:12px 0;
+        }
+
+        nav.scrolled .nav-brand .brand-name,
+        nav.scrolled .nav-brand .logo{
+            color:#0F172A;
+            background:rgba(15,23,42,0.08);
+        }
+
+        nav.scrolled .nav-links a{
+            color:#0F172A;
+        }
+
+        .nav-links{
+            display:flex;
+            list-style:none;
+            gap:32px;
+        }
+
+        .nav-links a{
+            color:#d0d8e8;
+            text-decoration:none;
+            font-size:14px;
+            font-weight:500;
+            transition:0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active{
+            color:white;
+        }
+/* --- HERO SECTION --- */
+        .hero {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(5,10,48,0.85) 0%, rgba(5,10,48,0.55) 100%), url("assets/images/Hero_BG.png") center/cover no-repeat;
+            background-blend-mode: overlay;
+            padding-top: 100px;
+            overflow: hidden;
+        }
+        .hero h1 { font-size: 46px; font-weight: 800; margin-bottom: 12px; }
+        .hero p { color: var(--text-gray); max-width: 750px; font-size: 15px; margin-bottom: 35px; }
+
+
+/* REMOVE OVERLAYS */
+
+.hero::before,
+.hero::after,
+.hero-overlay {
+    display: none;
+}
+
+/* HERO CONTENT WRAPPER */
+
+.hero-content {
+    width: 865px;
+    height: 145px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto;
+    text-align: center;
+
+    position: relative;
+    z-index: 2;
+}
+
+/* MAIN HEADING */
+
+.hero-content h1 {
+    width: 889px;
+    height: 83px;
+
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+
+    color: #ffffff;
+
+    margin: 0 0 20px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+/* SUB HEADING */
+
+.hero-content p {
+    width: 865px;
+    height: 52px;
+
+    font-size: 17px;
+    line-height: 1.9;
+
+    color: rgba(255, 255, 255, 0.92);
+
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 992px) {
+
+    .hero-content,
+    .hero-content p,
+    .hero-content h1 {
+        width: 100%;
+        height: auto;
+    }
+
+    .hero-content h1 {
+        font-size: 42px;
+        line-height: 1.1;
+    }
+
+    .hero-content p {
+        font-size: 15px;
+        line-height: 1.8;
+        max-width: 760px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .hero {
+        height: 72vh;
+        padding: 120px 20px 80px;
+    }
+
+    .hero-content h1 {
+        font-size: 36px;
+        letter-spacing: -1px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+    }
+}
+
+        /* ================= SEARCH ================= */
+
+        .blog-filters{
+            padding:40px 0 20px;
+        }
+
+        .filters-container{
+            width:95%;
+            max-width:1236px;
+            margin:auto;
+            display:flex;
+            flex-direction:column;
+            gap:18px;
+        }
+
+        .search-container{
+            width:100%;
+            position:relative;
+        }
+
+        .search-container input{
+            width:100%;
+            background:#fff;
+            border:none;
+            border-radius:50px;
+            height:52px;
+            padding:0 25px 0 55px;
+            font-size:15px;
+            color:#333;
+            outline:none;
+        }
+
+        .search-container i{
+            position:absolute;
+            left:22px;
+            top:50%;
+            transform:translateY(-50%);
+            color:#94a3b8;
+        }
+
+        /* ================= FILTER BAR ================= */
+
+        .filter-dock{
+            width:100%;
+            display:flex;
+            gap:12px;
+            margin-top:10px;
+            background:rgba(255,255,255,0.035);
+            backdrop-filter:blur(12px);
+            border:1px solid rgba(255,255,255,0.06);
+            padding:10px 14px;
+            border-radius:18px;
+            align-items:center;
+            justify-content:space-between;
+            overflow-x:auto;
+            flex-wrap:nowrap;
+        }
+
+        .filter-dock div{
+            font-size:14px;
+            font-weight:600;
+            color:rgba(255,255,255,0.65);
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            height:42px;
+            padding:0 18px;
+            border-radius:12px;
+            white-space:nowrap;
+            transition:0.3s ease;
+        }
+
+        .filter-dock div:hover{
+            background:rgba(255,255,255,0.05);
+            color:white;
+        }
+
+        .filter-dock div.active{
+            background:rgba(255,255,255,0.08);
+            color:white;
+        }
+
+        /* ================= BLOG GRID ================= */
+
+        .content-area{
+            width:100%;
+            max-width:1280px;
+            margin:50px auto 70px;
+        }
+
+        .blog-grid{
+            display:grid;
+            grid-template-columns:repeat(3,394px);
+            justify-content:center;
+            gap:32px;
+        }
+
+        .card{
+            width:394px;
+            background:#ffffff;
+            overflow:hidden;
+            display:flex;
+            flex-direction:column;
+            transition:0.35s ease;
+            box-shadow:0 12px 30px rgba(0,0,0,0.08);
+        }
+
+        .card:hover{
+            transform:translateY(-8px);
+        }
+
+        .card img{
+            width:100%;
+            height:220px;
+            object-fit:cover;
+        }
+
+        .card-content{
+            padding:22px;
+            color:#070809;
+            flex:1;
+        }
+
+        .card-content h3{
+            font-size:20px;
+            font-weight:800;
+            line-height:1.4;
+            margin-bottom:12px;
+        }
+
+        .card-content p{
+            font-size:13.5px;
+            line-height:1.7;
+            color:#6b7280;
+        }
+
+        .card-footer{
+            padding:18px 22px;
+            border-top:1px solid #f1f5f9;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .read-more{
+            font-size:13px;
+            font-weight:700;
+            color:var(--figma-blue);
+            text-decoration:none;
+        }
+
+        .card-icons{
+            color:var(--figma-blue);
+            display:flex;
+            gap:12px;
+        }
+
+        /* ================= UNIFIED PRODUCTS-STYLE CTA SECTION ================= */
+        .cta-section {
+            width: 100vw;
+            margin: 0;
+            padding: 100px 20px;
+            background: linear-gradient(90deg, #070F3A 0%, #0024DE 100%);
+            text-align: center;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+
+        .cta-section h2 { 
+            font-size: 42px; 
+            font-weight: 800; 
+            margin-bottom: 25px; 
+            color: white; 
+        }
+        
+        .cta-section p { 
+            color: rgba(255,255,255,0.9); 
+            font-size: 16px; 
+            max-width: 750px; 
+            margin: 0 auto 45px; 
+            line-height: 1.8; 
+        }
+        
+        .btn-group { 
+            display: flex; 
+            justify-content: center; 
+            gap: 25px; 
+            flex-wrap: wrap; 
+            margin-top: 40px; 
+        }
+        
+        .btn { 
+            padding: 14px 44px; 
+            border: none; 
+            border-radius: 50px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s ease; 
+            text-decoration: none; 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-white { 
+            background: linear-gradient(90deg, #0084ff, #0047ff); 
+            color: white; 
+        }
+        
+        .btn-white:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0,71,255,0.3); 
+        }
+        
+        .btn-outline { 
+            background: white; 
+            color: #1e293b; 
+        }
+        
+        .btn-outline:hover { 
+            transform: translateY(-3px); 
+            background: rgba(255,255,255,0.92); 
+        }
+
+        /* === SOLID COLOR FOOTER (NO OVERLAYS / EXACT HEX COLOR) === */
+        footer {
+            background-color: #050A30 !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            padding: 100px 0 40px 0;
+            color: white;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            font-family: 'Geist', sans-serif;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 50px;
+            width: 90%;
+            max-width: 1150px;
+            margin: 0 auto 80px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1150px;
+            margin: auto;
+            font-size: 12px;
+            color: #64748b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width:1280px){
+            .blog-grid{
+                grid-template-columns:repeat(2,394px);
+            }
+            .footer-grid { 
+                grid-template-columns: repeat(2, 1fr); 
+            }
+        }
+
+        @media(max-width:850px){
+            .blog-grid{
+                grid-template-columns:394px;
+            }
+
+            .card{
+                width:100%;
+                max-width:394px;
+            }
+
+            .hero h1{
+                font-size:42px;
+            }
+
+            .nav-links{
+                display:none;
+            }
+        }
+
+        @media (max-width: 760px) { 
+            .blog-grid, .footer-grid { 
+                grid-template-columns: 1fr; 
+            } 
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav id="navbar">
+
+        <div class="nav-inner">
+
+            <a href="index.html" class="nav-brand">
+                <span class="logo">C</span>
+                <span class="brand-name">Cerevyn</span>
+            </a>
+
+            <ul class="nav-links">
+
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./services.html">Services</a></li>
+                <li><a href="./products.html">Products</a></li>
+                <li><a href="./Tutorials.html">Tutorials</a></li>
+                <li><a href="./Blogs.html" class="active">Blogs</a></li>
+                <li><a href="./careers.html">Careers</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+
+    <section class="hero animate-on-scroll">
+
+    <div class="hero-content">
+
+        <h1>AI Insights & Blog</h1>
+
+        <p>
+            Expert perspectives, industry trends, and practical guides on
+            artificial intelligence and its transformative impact across industries.
+        </p>
+
+    </div>
+
+</section>
+
+    <!-- SEARCH -->
+
+    <section class="blog-filters">
+
+        <div class="filters-container">
+
+            <div class="search-container">
+
+                <i class="fas fa-search"></i>
+
+                <input type="text" placeholder="Search blogs...">
+
+            </div>
+
+            <div class="filter-dock">
+
+                <div class="active">
+                    <i class="fas fa-rocket"></i> All
+                </div>
+
+                <div>
+                    <i class="fas fa-heart"></i> Healthcare
+                </div>
+
+                <div>
+                    <i class="fas fa-graduation-cap"></i> Education
+                </div>
+
+                <div>
+                    <i class="fas fa-cog"></i> Automation
+                </div>
+
+                <div>
+                    <i class="fas fa-robot"></i> AI Agents
+                </div>
+
+                <div>
+                    <i class="fas fa-code"></i> Development
+                </div>
+
+                <div>
+                    <i class="fas fa-chart-line"></i> Business
+                </div>
+
+                <div>
+                    <i class="fas fa-globe"></i> General
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <main class="content-area">
+        <div class="blog-grid" id="blogGridContainer">
+            <div style="color: #72CCFC; padding: 40px; text-align: center; width: 100%; font-weight: 600;">
+                Loading live insights...
+            </div>
+        </div>
+    </main>
+
+    <section class="cta-section">
+        <h2>Stay Updated with AI Insights</h2>
+        <p>
+            Get the latest articles, tutorials, and industry insights delivered 
+            directly to your inbox. Join our community of AI enthusiasts and professionals.
+        </p>
+        <div class="btn-group">
+            <a href="#" class="btn btn-white">Subscribe to Newsletter</a>
+            <a href="#" class="btn btn-outline">Explore Our Services</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div style="background: #e2e8f0; width: 180px; height: 50px; margin-bottom: 25px; border-radius: 4px;"></div>
+                <p style="font-size: 14px; color: #94a3b8; line-height: 1.7; margin-bottom: 25px;">
+                    A global AI company transforming healthcare, education, and business operations with intelligent solutions designed for a smarter, more connected tomorrow.
+                </p>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <i class="fab fa-facebook" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-twitter" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-linkedin" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-instagram" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-youtube" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 25px;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0; color: #94a3b8; font-size: 14px; line-height: 2.2;">
+                    <li>• Home</li>
+                    <li>• About Us</li>
+                    <li>• Services</li>
+                    <li>• Mission & Vision</li>
+                    <li>• Careers</li>
+                    <li>• Tutorials</li>
+                    <li>• Blog</li>
+                    <li>• Contact</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 25px;">Our Services</h4>
+                <ul style="list-style: none; padding: 0; color: #94a3b8; font-size: 14px; line-height: 2.2;">
+                    <li>• AI Healthcare Solutions</li>
+                    <li>• AI Education Platforms</li>
+                    <li>• AI Development Services</li>
+                    <li>• AI Automation Systems</li>
+                    <li>• Agentic AI Solutions</li>
+                    <li>• Entity Management Portal</li>
+                </ul>
+            </div>
+
+            <div>
+                <p style="font-size: 14px; color: #f8fafc; margin-bottom: 15px; font-weight: 500;">Subscribe to our newsletter for AI insights and updates.</p>
+                <input type="text" placeholder="Your email address" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: none; background: white; margin-bottom: 10px; font-size: 13px;">
+                <button style="width: 100%; background: #0024DE; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-bottom: 30px;">Subscribe</button>
+                
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px;">Contact Us</h4>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 8px;"><strong>Email Us:</strong> info@cerevyn.com</p>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;"><strong>Call Us:</strong> +91 78935 25665</p>
+                <p style="font-size: 12px; color: #64748b; line-height: 1.5;">
+                    Our Headquarters:<br>
+                    T-Hub, Hyderabad Knowledge City, Serilingampally, Hyderabad, Telangana 500081, India
+                </p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2026 Cerevyn Solutions Pvt Ltd. All rights reserved.</div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <span>Privacy Policy</span>
+                <span>Terms of Service</span>
+                <span>Cookie Policy</span>
+                <span>Sitemap</span>
+                <span style="color: white;">Made with passion in India</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    // Global Supabase initialization configuration
+    const supabaseUrl = 'https://cpvhzdxxpgftjkjqadec.supabase.co';
+    const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdmh6ZHh4cGdmdGpranFhZGVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDY4NjEsImV4cCI6MjA5NTg4Mjg2MX0._nBO3Dlv09pHh8LjcLfMH7sovDvQJDz9qKAN_rlrP4I'; 
+    const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    // Fallback static array matching your original cards structure exactly
+    const fallbackBlogs = [
+        { title: "Quantum Computing: Unlocking the Future of Technology", description: "Explore the fundamentals, breakthroughs, and potential applications of quantum computing.", image: "assets/images/Blogs_1.png" },
+        { title: "What is Blockchain? An In-Depth Introduction", description: "Explore the basics of blockchain technology, how it works, and its impact on industries.", image: "assets/images/Blogs_2.png" },
+        { title: "Understanding Agentic AI: Future of Autonomous Systems", description: "Discover how AI agents are changing the next generation of automation.", image: "assets/images/Blogs_3.png" },
+        { title: "The Rise of AI Drones: Transforming Technology", description: "Explore how AI-powered drones are revolutionizing industries with advanced capabilities.", image: "assets/images/Blogs_4.png" },
+        { title: "How AI is Transforming Education", description: "Discover the impact of artificial intelligence in education and learning experiences.", image: "assets/images/Blogs_5.png" },
+        { title: "Blockchain for Beginners: A Complete Guide", description: "Learn how blockchain works and its future applications in modern technology.", image: "assets/images/Blogs_6.png" },
+        { title: "AI Agents and Business Automation", description: "Learn how autonomous AI systems are transforming business operations.", image: "assets/images/Blogs_7.png" },
+        { title: "AI-Powered Drones: Innovation and Applications", description: "Explore the future of drone technology powered by artificial intelligence.", image: "assets/images/Blogs_8.png" },
+        { title: "AI in Modern Education: Opportunities and Growth", description: "Discover how AI is shaping the future of education systems worldwide.", image: "assets/images/Blogs_9.png" }
+    ];
+
+    // Fetching function from Supabase database
+    async function fetchAndRenderBlogs() {
+        const container = document.getElementById('blogGridContainer');
+        if(!container) return;
+
+        // Start with a direct clone of your original baseline data
+        let activeBlogs = [...fallbackBlogs];
+
+        try {
+            // Fetch rows from 'blogs' table ordered by newest first
+            const { data: dbBlogs, error } = await _supabase
+                .from('blogs')
+                .select('*')
+                .order('id', { ascending: false });
+
+            // Non-destructive appending logic: If db records exist, inject them behind the static ones
+            if (!error && dbBlogs && dbBlogs.length > 0) {
+                dbBlogs.forEach(article => {
+                    activeBlogs.push(article);
+                });
+            }
+        } catch (err) {
+            console.error("Could not sync live blogs from database:", err);
+        }
+
+        container.innerHTML = activeBlogs.map(article => {
+            // Flexible field mappings to gracefully match admin portal inputs with baseline fallbacks
+            const title = article.title || 'Untitled Post';
+            const description = article.description || article.content || 'No description available.';
+            const imgUrl = article.image || article.image_url || 'assets/images/Blogs_1.png';
+            const redirectLink = article.link || article.slug || '#';
+
+            return `
+                <div class="card">
+                    <img src="${imgUrl}" alt="${title}">
+                    <div class="card-content">
+                        <h3>${title}</h3>
+                        <p>${description}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="${redirectLink}" class="read-more">Read More →</a>
+                        <div class="card-icons">
+                            <i class="far fa-share-square"></i>
+                            <i class="far fa-bookmark"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Initialize elements and scroll triggers when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchAndRenderBlogs();
+
+        // Navbar behavior matching original script execution state
+        const navbar = document.getElementById("navbar");
+        if (navbar) {
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add("scrolled");
+                } else {
+                    navbar.classList.remove("scrolled");
+                }
+            });
+        }
+    });
+</script>

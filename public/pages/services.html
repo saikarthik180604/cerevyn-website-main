@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Cerevyn AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #0024DE;
+            --primary-accent: #72CCFC;
+            --dark-bg: #050A30;
+            --darker-bg: #050A30;
+            --text-light: #E6E5FF;
+            --text-muted: #475569;
+            --text-dark: #000B58;
+            --card-white: #ffffff;
+            --page-bg: radial-gradient(circle at top, rgba(114, 204, 252, 0.12), rgba(5, 10, 48, 0.92) 40%), #050A30;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--page-bg);
+            background-attachment: fixed;
+            color: var(--text-light);
+            line-height: 1.6;
+            padding-top: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1336px;
+            margin: auto;
+        }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 100;
+            width: 100%;
+            padding: 22px 40px;
+            background: transparent;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: padding 0.35s ease, background 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease, opacity 0.35s ease;
+        }
+
+        .nav-inner {
+            width: min(1336px, calc(100% - 120px));
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .nav-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-brand .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 1.05rem;
+            color: #72CCFC;
+        }
+
+        .nav-brand .brand-name {
+            color: #ffffff;
+        }
+
+        nav.ready {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            padding: 12px 0;
+        }
+
+        nav.scrolled .nav-brand .brand-name,
+        nav.scrolled .nav-brand .logo {
+            color: #0F172A;
+            background: rgba(15, 23, 42, 0.08);
+        }
+
+        nav.scrolled .nav-links a {
+            color: #0F172A;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links a {
+            color: #d0d8e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-links a.active {
+            color: white;
+            font-weight: 700;
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            padding: 140px 0 90px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: url("assets/images/Hero_BG.png") center top/cover no-repeat;
+            color: #ffffff;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 0;
+        }
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 1336px;
+            margin: auto;
+        }
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+            color: #ffffff;
+        }
+        .hero p {
+            color: rgba(255,255,255,0.88);
+            max-width: 720px;
+            margin: 0 auto;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        /* === FILTERS SECTION === */
+        .filters-section {
+            padding: 60px 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            position: relative;
+            height: 180px;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.4s ease;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            transition: 0.4s ease;
+        }
+
+        .category-card span {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .category-card:hover img,
+        .category-card.active img {
+            opacity: 0.8;
+            transform: scale(1.1);
+        }
+
+        .category-card.active {
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            margin-bottom: 60px;
+            font-size: 14px;
+        }
+
+        /* --- STYLED EXACT FIGMA 1336PX CONTAINER MAIN GRID SECTION --- */
+        .main-grid-section {
+            padding: 0 0 100px 0;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 420px);
+            gap: 38px;
+            width: 1336px;
+            justify-content: center;
+        }
+
+        /* CARD W - 420px H - 650px SHARP BORDERS ONLY */
+        .s-item {
+            width: 420px;
+            height: 650px;
+            background: var(--card-white);
+            color: var(--text-dark);
+            border-radius: 0px !important; 
+            border: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.5s ease forwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .s-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* IMAGE SIZE W - 420px H - 310px */
+        .s-item img {
+            width: 420px;
+            height: 310px;
+            object-fit: cover;
+            display: block;
+            border-radius: 0px !important;
+        }
+
+        /* ENTIRE CONTENT W - 336.59px H - 205.79px CENTERED */
+        .s-item-content {
+            width: 336.59px;
+            height: 205.79px;
+            margin: 28px auto auto auto;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            text-align: left;
+            align-items: flex-start;
+        }
+
+        .s-item-content h3 {
+            font-size: 26px;
+            margin-bottom: 12px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: var(--text-dark);
+        }
+
+        .s-item-content p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .s-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: auto;
+        }
+
+        .s-tag {
+            font-size: 11px;
+            background: #ffffff;
+            padding: 6px 14px;
+            border-radius: 50px;
+            color: #000B58;
+            font-weight: 600;
+            border: 1px solid #000B58;
+        }
+
+        /* === PARTNER SECTION === */
+        .partner-section {
+            background: transparent;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .partner-title h2 {
+            font-size: 38px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .partner-title p {
+            font-size: 16px;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto 60px;
+            opacity: 0.85;
+        }
+
+        .partner-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .p-box {
+            background: var(--card-white);
+            padding: 40px 30px;
+            border-radius: 0px !important;
+            border: none;
+            text-align: left;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: #000B58;
+        }
+
+        .p-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .p-box .partner-icon {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .p-box h4 {
+            font-size: 19px;
+            font-weight: 700;
+            color: #000B58;
+            margin-bottom: 12px;
+        }
+
+        .p-box p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* === CTA SECTION === */
+        .cta-section {
+            width: 100vw;
+            margin: 0;
+            padding: 100px 20px;
+            background: linear-gradient(90deg, #070F3A 0%, #0024DE 100%);
+            text-align: center;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+
+        .cta-section h2 { font-size: 42px; font-weight: 800; margin-bottom: 25px; color: white; }
+        .cta-section p { color: rgba(255,255,255,0.9); font-size: 16px; max-width: 750px; margin: 0 auto 45px; line-height: 1.8; }
+        .btn-group{ display:flex; justify-content:center; gap:25px; flex-wrap:wrap; margin-top:40px; }
+        
+        .btn { 
+            padding: 14px 44px;
+            border: none; 
+            border-radius: 50px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: 0.3s ease; 
+            text-decoration: none; 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-white{ background: linear-gradient(90deg, #0084ff, #0047ff); color:white; }
+        .btn-white:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,71,255,0.3); }
+        .btn-outline{ background:white; color:#1e293b; }
+        .btn-outline:hover { transform: translateY(-3px); background: rgba(255,255,255,0.92); }
+
+         /* === SOLID COLOR FOOTER === */
+        footer {
+            background-color: #050A30 !important;
+            background-image: none !important;
+            backdrop-filter: none !important;
+            padding: 100px 0 40px 0;
+            color: white;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            gap: 50px;
+            width: 90%;
+            max-width: 1336px;
+            margin: 0 auto 80px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1336px;
+            margin: auto;
+            font-size: 12px;
+            color: #64748b;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        @media (max-width: 1380px) {
+            .service-grid { grid-template-columns: repeat(2, 420px); width: auto; }
+        }
+        @media (max-width: 900px) {
+            .service-grid { grid-template-columns: repeat(1, 420px); width: auto; }
+            .category-grid, .partner-grid, .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="logo">C</span>
+                <span class="brand-name">Cerevyn</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./services.html" class="active">Services</a></li>
+                <li><a href="./products.html">Products</a></li>
+                <li><a href="./Tutorials.html">Tutorials</a></li>
+                <li><a href="./Blogs.html">Blogs</a></li>
+                <li><a href="./careers.html">Careers</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-inner">
+            <h1>Intelligent AI Services</h1>
+            <p>Transform your business with cutting-edge AI solutions designed to drive growth, efficiency, and competitive advantage across every industry vertical.</p>
+        </div>
+    </header>
+
+    <section class="filters-section container">
+        <div class="category-grid">
+            <div class="category-card active" onclick="filterData('all', this)">
+                <img src="assets/images/All_services.jpeg" alt="All Services">
+                <span>All Services</span>
+            </div>
+            <div class="category-card" onclick="filterData('ai', this)">
+                <img src="assets/images/Ai_Tech.jpeg" alt="AI & Technology">
+                <span>AI & Technology</span>
+            </div>
+            <div class="category-card" onclick="filterData('web', this)">
+                <img src="assets/images/System_Web.jpeg" alt="Systems & Web">
+                <span>Systems & Web</span>
+            </div>
+            <div class="category-card" onclick="filterData('creative', this)">
+                <img src="assets/images/Creative_media.jpeg" alt="Creative & Media">
+                <span>Creative & Media</span>
+            </div>
+        </div>
+
+        <input type="text" class="search-bar" placeholder="Search for a service...">
+    </section>
+
+    <section class="main-grid-section container">
+        <div class="service-grid" id="serviceGrid">
+            
+            <!-- Card 1 -->
+            <div class="s-item ai">
+                <img src="assets/images/Pic_1.png" alt="">
+                <div class="s-item-content">
+                    <h3>Agentic AI Solutions</h3>
+                    <p>Built for scalable workflows, intelligent decision-making, and multi-step automation across enterprise environments.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">AI Agents</span>
+                        <span class="s-tag">Workflow Automation</span>
+                        <span class="s-tag">Multi-Agent Systems</span>
+                        <span class="s-tag">Decision Intelligence</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="s-item web">
+                <img src="assets/images/Pic_2.png" alt="">
+                <div class="s-item-content">
+                    <h3>AI-Enabled Mobile & Web Apps</h3>
+                    <p>Intelligent apps that scale with enterprise needs, featuring conversational interfaces and recommendation engines.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">Voice & Text Interface</span>
+                        <span class="s-tag">Recommendation Engines</span>
+                        <span class="s-tag">Personalization AI</span>
+                        <span class="s-tag">Reinforcement Learning</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="s-item ai">
+                <img src="assets/images/Pic_3.png" alt="">
+                <div class="s-item-content">
+                    <h3>Custom AI/ML Model Development</h3>
+                    <p>End-to-end development of machine learning and deep learning models for business intelligence.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">Classification & Regression</span>
+                        <span class="s-tag">Time-Series Analytics</span>
+                        <span class="s-tag">Exploratory AI</span>
+                        <span class="s-tag">Reinforcement Learning</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="s-item ai">
+                <img src="assets/images/Pic_4.png" alt="">
+                <div class="s-item-content">
+                    <h3>WhatsApp Business Automation Suite</h3>
+                    <p>AI-powered WhatsApp automation for smarter customer engagement, lead management, and seamless support.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">WhatsApp CRM</span>
+                        <span class="s-tag">AI Chat Automation</span>
+                        <span class="s-tag">Smart Reply System</span>
+                        <span class="s-tag">Workflow Automation</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="s-item ai">
+                <img src="assets/images/Pic_5.png" alt="">
+                <div class="s-item-content">
+                    <h3>NLP & LLM Services</h3>
+                    <p>Unlock language intelligence from unstructured text with advanced language models and semantic analysis powered solutions.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">LLM Fine-Tuning</span>
+                        <span class="s-tag">Semantic Search</span>
+                        <span class="s-tag">Sentiment Analysis</span>
+                        <span class="s-tag">GenAI Custom Application</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="s-item creative">
+                <img src="assets/images/Pic_6.png" alt="">
+                <div class="s-item-content">
+                    <h3>Web Design (UI/UX & Branding)</h3>
+                    <p>Visually compelling, user-centric designs that drive conversions and strengthen brand identity worldwide with measurable impact consistently.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">Responsive Design</span>
+                        <span class="s-tag">UX Research</span>
+                        <span class="s-tag">Visual Systems</span>
+                        <span class="s-tag">Conversion Optimization</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="s-item web">
+                <img src="assets/images/Pic_7.png" alt="">
+                <div class="s-item-content">
+                    <h3>Web Development</h3>
+                    <p>We build responsive websites, web applications, and enterprise platforms focused on seamless user experience, performance, and scalability.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">Frontend Development</span>
+                        <span class="s-tag">Backend Systems</span>
+                        <span class="s-tag">Cloud Deployment</span>
+                        <span class="s-tag">Interactive Dashboards</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="s-item web">
+                <img src="assets/images/Pic_8.png" alt="">
+                <div class="s-item-content">
+                    <h3>Enterprise System Development</h3>
+                    <p>Custom ERP, CRM, and business systems with workflow automation and reporting engines enabling end-to-end digital transformation.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">ERP/CRM Systems</span>
+                        <span class="s-tag">Workflow Automation</span>
+                        <span class="s-tag">SaaS Platforms</span>
+                        <span class="s-tag">Multi-tenant Architecture</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9 -->
+            <div class="s-item ai">
+                <img src="assets/images/Pic_9.png" alt="">
+                <div class="s-item-content">
+                    <h3>AI-Integrated Web Systems</h3>
+                    <p>Web platforms enhanced with AI chatbots, recommendation engines, and predictive analytics for smarter personalized digital experiences globally.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">AI Chatbots</span>
+                        <span class="s-tag">Recommendation Systems</span>
+                        <span class="s-tag">Predictive Analytics</span>
+                        <span class="s-tag">Document Processing</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 10 -->
+            <div class="s-item creative">
+                <img src="assets/images/Pic_10.png" alt="">
+                <div class="s-item-content">
+                    <h3>AI-Driven Digital Marketing Strategy</h3>
+                    <p>Data-backed campaign planning with audience segmentation, competitor analysis, and ROI-focused media mix optimization.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">Data-Driven Strategy</span>
+                        <span class="s-tag">Audience Segmentation</span>
+                        <span class="s-tag">Competitor Analysis</span>
+                        <span class="s-tag">ROI-Focused Planning</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 11 -->
+            <div class="s-item creative">
+                <img src="assets/images/Pic_11.png" alt="">
+                <div class="s-item-content">
+                    <h3>AI Content Creation & Automation</h3>
+                    <p>AI-generated marketing copy, visual creatives, and multilingual content at scale with performance predictions powered by data-driven optimization.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">Marketing Copy</span>
+                        <span class="s-tag">Visual Creatives</span>
+                        <span class="s-tag">Video Scripts</span>
+                        <span class="s-tag">Multilingual Content</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 12 -->
+            <div class="s-item ai">
+                <img src="assets/images/Pic_12.png" alt="">
+                <div class="s-item-content">
+                    <h3>Marketing Automation & CRM Intelligence</h3>
+                    <p>AI-driven marketing automation with lead scoring, churn prediction, and personalized customer journey analytics.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">AI Email Automation</span>
+                        <span class="s-tag">Lead Scoring</span>
+                        <span class="s-tag">Churn Prediction</span>
+                        <span class="s-tag">Journey Analytics</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 13 -->
+            <div class="s-item creative">
+                <img src="assets/images/Pic_13.png" alt="">
+                <div class="s-item-content">
+                    <h3>AI Video & Graphics Production</h3>
+                    <p>Next-generation video production with AI-assisted editing and automated graphics generation.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">Automated Editing</span>
+                        <span class="s-tag">AI Graphics</span>
+                        <span class="s-tag">Real-time Rendering</span>
+                        <span class="s-tag">Content Enhancement</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 14 -->
+            <div class="s-item creative">
+                <img src="assets/images/Pic_14.png" alt="">
+                <div class="s-item-content">
+                    <h3>AI Branding & Creative Intelligence</h3>
+                    <p>AI-driven brand strategy, media intelligence, and creative campaign optimization globally deployed.</p>
+                    <div class="s-tags">
+                        <span class="s-tag">Brand Solutions</span>
+                        <span class="s-tag">Media Insights</span>
+                        <span class="s-tag">Campaign Analytics</span>
+                        <span class="s-tag">AI Storytelling</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="partner-section container">
+        <div class="partner-title">
+            <h2>Why Partner With Cerevyn?</h2>
+            <p>We combine cutting-edge AI technology with unparalleled expertise to deliver transformative results.</p>
+        </div>
+        <div class="partner-grid">
+            <div class="p-box">
+                <img src="assets/images/Service_icon_1.png" alt="Lightning-Fast Deployment" class="partner-icon">
+                <h4>Lightning-Fast Deployment</h4>
+                <p>Rapid implementation with AI-assisted setup and minimal systems disruption.</p>
+            </div>
+            <div class="p-box">
+                <img src="assets/images/Service_icon_2.png" alt="Military-Grade Security" class="partner-icon">
+                <h4>Military-Grade Security</h4>
+                <p>Enterprise security with end-to-end encryption and compliance architecture.</p>
+            </div>
+            <div class="p-box">
+                <img src="assets/images/Service_icon_3.png" alt="Dedicated AI Support" class="partner-icon">
+                <h4>Dedicated AI Support</h4>
+                <p>24/7 expert support with AI-powered assistance and continuous optimization.</p>
+            </div>
+            <div class="p-box">
+                <img src="assets/images/Service_icon_4.png" alt="Scalable Intelligence" class="partner-icon">
+                <h4>Scalable Intelligence</h4>
+                <p>Elastic AI solutions that grow with your business and adapt to your data.</p>
+            </div>
+            <div class="p-box">
+                <img src="assets/images/Service_icon_5.png" alt="Global Integration" class="partner-icon">
+                <h4>Global Integration</h4>
+                <p>Seamless integration with existing frameworks across multiple regions and platforms.</p>
+            </div>
+            <div class="p-box">
+                <img src="assets/images/Service_icon_6.png" alt="Continuous Innovation" class="partner-icon">
+                <h4>Continuous Innovation</h4>
+                <p>Regular model updates and feature enhancements for sustained advantage.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to Transform Your Business?</h2>
+        <p>Partner with Cerevyn to leverage cutting-edge AI solutions including drones, surveying, and automation that drive innovation and create competitive advantages in your industry.</p>
+        <div class="btn-group">
+            <a href="#" class="btn btn-white">Start Your AI Journey</a>
+            <a href="#" class="btn btn-outline">Learn About Us</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <div style="background: #e2e8f0; width: 180px; height: 50px; margin-bottom: 25px; border-radius: 4px;"></div>
+                <p style="font-size: 14px; color: #94a3b8; line-height: 1.7; margin-bottom: 25px;">
+                    A global AI company transforming healthcare, education, and business operations with intelligent solutions designed for a smarter, more connected tomorrow.
+                </p>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <i class="fab fa-facebook" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-twitter" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-linkedin" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-instagram" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                    <i class="fab fa-youtube" style="color: #94a3b8; font-size: 18px; cursor: pointer;"></i>
+                </div>
+            </div>
+
+            <div>
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 25px;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0; color: #94a3b8; font-size: 14px; line-height: 2.2;">
+                    <li>• Home</li>
+                    <li>• About Us</li>
+                    <li>• Services</li>
+                    <li>• Mission & Vision</li>
+                    <li>• Careers</li>
+                    <li>• Tutorials</li>
+                    <li>• Blog</li>
+                    <li>• Contact</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 25px;">Our Services</h4>
+                <ul style="list-style: none; padding: 0; color: #94a3b8; font-size: 14px; line-height: 2.2;">
+                    <li>• AI Healthcare Solutions</li>
+                    <li>• AI Education Platforms</li>
+                    <li>• AI Development Services</li>
+                    <li>• AI Automation Systems</li>
+                    <li>• Agentic AI Solutions</li>
+                    <li>• Entity Management Portal</li>
+                </ul>
+            </div>
+
+            <div>
+                <p style="font-size: 14px; color: #f8fafc; margin-bottom: 15px; font-weight: 500;">Subscribe to our newsletter for AI insights and updates.</p>
+                <input type="text" placeholder="Your email address" style="width: 100%; padding: 12px 15px; border-radius: 8px; border: none; background: white; margin-bottom: 10px; font-size: 13px;">
+                <button style="width: 100%; background: #007bff; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-bottom: 30px;">Subscribe</button>
+                
+                <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 15px;">Contact Us</h4>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 8px;"><strong>Email Us:</strong> info@cerevyn.com</p>
+                <p style="font-size: 13px; color: #94a3b8; margin-bottom: 15px;"><strong>Call Us:</strong> +91 78935 25665</p>
+                <p style="font-size: 12px; color: #64748b; line-height: 1.5;">
+                    Our Headquarters:<br>
+                    T-Hub, Hyderabad Knowledge City, Serilingampally, Hyderabad, Telangana 500081, India
+                </p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2026 Cerevyn Solutions Pvt Ltd. All rights reserved.</div>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <span>Privacy Policy</span>
+                <span>Terms of Service</span>
+                <span>Cookie Policy</span>
+                <span>Sitemap</span>
+                <span style="color: white;">Made with passion in India</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function filterData(category, element) {
+            const filterCards = document.querySelectorAll('.category-card');
+            filterCards.forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+
+            const serviceItems = document.querySelectorAll('.s-item');
+            serviceItems.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'flex';
+                    item.style.animation = 'none';
+                    item.offsetHeight; 
+                    item.style.animation = 'fadeInUp 0.5s ease forwards';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-bar');
+            if(searchInput) {
+                searchInput.addEventListener('input', () => {
+                    const value = searchInput.value.toLowerCase();
+                    const items = document.querySelectorAll('.s-item');
+                    
+                    items.forEach(item => {
+                        const text = item.innerText.toLowerCase();
+                        item.style.display = text.includes(value) ? 'flex' : 'none';
+                    });
+                });
+            }
+
+            const nav = document.querySelector('nav');
+            function updateNav() {
+                if (window.scrollY > 20) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            }
+
+            window.addEventListener('scroll', updateNav);
+            updateNav();
+            setTimeout(() => nav.classList.add('ready'), 50);
+        });
+    </script>
+</body>
+</html>
