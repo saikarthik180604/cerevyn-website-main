@@ -226,18 +226,22 @@
 
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 32px;
         }
 
         .white-card {
             background: white;
             border-radius: 20px;
             padding: 34px 28px;
+            min-height: 280px;
             color: #0f172a;
 
             transition: 0.35s ease;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .white-card:hover {

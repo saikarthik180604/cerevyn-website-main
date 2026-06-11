@@ -214,16 +214,20 @@
         /* ================= WHITE CARDS ================= */
         .grid-4 {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 32px;
         }
 
         .white-card {
             background: white;
             border-radius: 12px;
             padding: 28px 20px;
+            min-height: 280px;
             color: #0f172a;
             transition: 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .white-card:hover {
