@@ -37,6 +37,9 @@ function injectStyles(doc, styleRefs) {
   const styles = Array.from(doc.querySelectorAll('style'));
 
   links.forEach(link => {
+    // BLOCK: Do not inject Google Fonts links to prevent competition with Geist
+    if (link.href.includes('fonts.googleapis.com')) return;
+    
     const node = document.createElement('link');
     node.rel = 'stylesheet';
     node.href = link.href;
@@ -45,8 +48,13 @@ function injectStyles(doc, styleRefs) {
   });
 
   styles.forEach(style => {
+    // SANITIZER: Strip 'font-family' rules from legacy styles before injection
+    let cssText = style.textContent;
+    // This removes any declaration like 'font-family: ...;'
+    cssText = cssText.replace(/font-family\s*:[^;}]*;/gi, '');
+    
     const node = document.createElement('style');
-    node.textContent = style.textContent;
+    node.textContent = cssText;
     document.head.appendChild(node);
     styleRefs.push(node);
   });
