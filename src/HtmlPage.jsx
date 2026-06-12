@@ -100,8 +100,10 @@ function fixAssetPaths(html) {
     .replace(/url\(assets\//g, 'url(/assets/');
 }
 
+import morphdom from 'morphdom';
+
 export default function HtmlPage({ pageName }) {
-  const [content, setContent] = useState('');
+  const [updateTick, setUpdateTick] = useState(0);
   const [error, setError] = useState(null);
   const containerRef = useRef(null);
   const styleRefs = useRef([]);
@@ -109,9 +111,23 @@ export default function HtmlPage({ pageName }) {
   const pendingScripts = useRef([]);
   const navigate = useNavigate();
 
+  // Clean up all styles and scripts on component unmount
+  useEffect(() => {
+    return () => {
+      cleanInjectedNodes(styleRefs.current);
+      cleanInjectedNodes(scriptRefs.current);
+    };
+  }, []);
+
   useEffect(() => {
     let active = true;
-    cleanInjectedNodes(styleRefs.current);
+
+    // Save previous refs to clean them up after new content is rendered
+    const prevStyles = [...styleRefs.current];
+    const prevScripts = [...scriptRefs.current];
+
+    styleRefs.current = [];
+    scriptRefs.current = [];
 
     async function loadPage() {
       try {
@@ -136,12 +152,36 @@ export default function HtmlPage({ pageName }) {
         const fixedHtml = fixAssetPaths(bodyHtml);
 
         if (active) {
-          setContent(fixedHtml);
           setError(null);
+          
+          // Wait for next paint to avoid blinking/FOUC
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              if (containerRef.current) {
+                if (!containerRef.current.hasChildNodes()) {
+                  containerRef.current.innerHTML = fixedHtml;
+                } else {
+                  const newDiv = document.createElement('div');
+                  newDiv.innerHTML = fixedHtml;
+                  morphdom(containerRef.current, newDiv, {
+                    childrenOnly: true
+                  });
+                }
+                setUpdateTick(t => t + 1);
+              }
+              cleanInjectedNodes(prevStyles);
+              cleanInjectedNodes(prevScripts);
+            }, 50);
+          });
+        } else {
+          // If aborted, clean up the newly injected styles
+          cleanInjectedNodes(styleRefs.current);
         }
       } catch (err) {
         if (active) {
           setError('Unable to load page');
+          cleanInjectedNodes(prevStyles);
+          cleanInjectedNodes(prevScripts);
         }
       }
     }
@@ -150,14 +190,11 @@ export default function HtmlPage({ pageName }) {
 
     return () => {
       active = false;
-      cleanInjectedNodes(styleRefs.current);
-      cleanInjectedNodes(scriptRefs.current);
-      pendingScripts.current = [];
     };
   }, [pageName]);
 
   useEffect(() => {
-    if (!content) return;
+    if (updateTick === 0) return;
     if (pendingScripts.current.length === 0) return;
 
     const scripts = [...pendingScripts.current];
@@ -207,7 +244,7 @@ export default function HtmlPage({ pageName }) {
     };
 
     loadScript(0);
-  }, [content]);
+  }, [updateTick]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -227,7 +264,7 @@ export default function HtmlPage({ pageName }) {
 
     container.addEventListener('click', handleClick);
     return () => container.removeEventListener('click', handleClick);
-  }, [navigate, content]);
+  }, [navigate, updateTick]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -279,9 +316,12 @@ export default function HtmlPage({ pageName }) {
         observer.disconnect();
       }
     };
-  }, [content]);
+  }, [updateTick]);
 
   return (
-    <div ref={containerRef} dangerouslySetInnerHTML={{ __html: error ? `<div style="padding: 48px; color: #fff; text-align:center;">${error}</div>` : content }} />
+    <>
+      {error && <div style={{ padding: '48px', color: '#fff', textAlign: 'center' }}>{error}</div>}
+      <div ref={containerRef} style={{ display: error ? 'none' : 'block' }} />
+    </>
   );
 }
