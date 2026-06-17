@@ -39,7 +39,7 @@ function injectStyles(doc, styleRefs) {
   links.forEach(link => {
     // BLOCK: Do not inject Google Fonts links to prevent competition with Geist
     if (link.href.includes('fonts.googleapis.com')) return;
-    
+
     const node = document.createElement('link');
     node.rel = 'stylesheet';
     node.href = link.href;
@@ -52,7 +52,7 @@ function injectStyles(doc, styleRefs) {
     let cssText = style.textContent;
     // This removes any declaration like 'font-family: ...;'
     cssText = cssText.replace(/font-family\s*:[^;}]*;/gi, '');
-    
+
     const node = document.createElement('style');
     node.textContent = cssText;
     document.head.appendChild(node);
@@ -153,7 +153,7 @@ export default function HtmlPage({ pageName }) {
 
         if (active) {
           setError(null);
-          
+
           // Wait for next paint to avoid blinking/FOUC
           requestAnimationFrame(() => {
             setTimeout(() => {
