@@ -61,14 +61,16 @@ function injectStyles(doc, styleRefs) {
 }
 
 function collectScripts(doc) {
-  return Array.from(doc.querySelectorAll('script')).map(script => ({
-    src: script.src || null,
-    type: script.type || null,
-    async: script.async || false,
-    defer: script.defer || false,
-    noModule: script.noModule || false,
-    content: script.src ? null : script.textContent || ''
-  }));
+  return Array.from(doc.querySelectorAll('script'))
+    .filter(script => !script.src || !script.src.includes('tailwindcss.com'))
+    .map(script => ({
+      src: script.src || null,
+      type: script.type || null,
+      async: script.async || false,
+      defer: script.defer || false,
+      noModule: script.noModule || false,
+      content: script.src ? null : script.textContent || ''
+    }));
 }
 
 function cleanInjectedNodes(nodes) {
